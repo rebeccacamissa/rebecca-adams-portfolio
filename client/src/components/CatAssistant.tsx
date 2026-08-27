@@ -1,8 +1,9 @@
-/* Camel Editorial Atelier: Rebecca's black-cat guide is a tactile, quietly playful interruption in the parchment-and-boho editorial system. */
+/* Camel Editorial Atelier: Rebecca's cat guide remains an unboxed, transparent and quietly playful part of the parchment editorial system. */
 import { Download, MessageCircle, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CatMood = "excited" | "normal" | "sleeping";
+type CatAnswer = "welcome" | "about" | "skills" | "resume";
 
 const CAT_IMAGES: Record<CatMood, string> = {
   excited: "/manus-storage/rebecca-cat-excited_1a4a1ef1.png",
@@ -10,39 +11,42 @@ const CAT_IMAGES: Record<CatMood, string> = {
   sleeping: "/manus-storage/rebecca-cat-sleeping_a76e0b0c.png",
 };
 
-const welcomeCopy: Record<CatMood, string> = {
-  excited: "Welcome in — I saved the best details for you.",
-  normal: "Curious? I can point you to the good stuff.",
-  sleeping: "I’m recharging. Give the page a nudge when you’re ready.",
+const responses: Record<CatAnswer, string> = {
+  welcome: "Welcome in — I saved the details that show how Rebecca thinks, learns, and turns everyday problems into clearer digital experiences.",
+  about: "Rebecca is an emerging junior web developer with a resilient, people-centred foundation. After matriculating in 2024, she entered the workforce to support her family, building composure and accountability in customer-facing and operations roles. That experience sparked a fascination with creative technology: she now uses CAPACITI’s intensive programme to turn practical insight into thoughtful, user-aware digital work.",
+  skills: "Rebecca combines the reliability of a customer-service professional with a growing digital toolkit. She brings precise data handling, Google Workspace and Microsoft 365 fluency, UX-minded problem-solving, and a strong instinct for clear communication. Just as importantly, her teamwork, time management, adaptability, and rapid-learning mindset help her contribute steadily in fast-moving environments while she continues to build technical depth.",
+  resume: "Rebecca’s CV is opening in a new tab. It offers a focused view of her operations experience, data and digital-skills training, customer-service strengths, and current direction as a junior web developer. Thank you for taking the time to learn more about the person behind the portfolio.",
 };
 
 export default function CatAssistant({ cvUrl }: { cvUrl: string }) {
   const [mood, setMood] = useState<CatMood>("excited");
   const [open, setOpen] = useState(true);
-  const [message, setMessage] = useState(welcomeCopy.excited);
+  const [answer, setAnswer] = useState<CatAnswer>("welcome");
   const [pupil, setPupil] = useState({ x: 0, y: 0 });
+  const mascotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let sleepTimer: ReturnType<typeof setTimeout>;
     const setActive = () => {
       setMood("normal");
-      setMessage(welcomeCopy.normal);
+      if (answer === "welcome") setAnswer("welcome");
       clearTimeout(sleepTimer);
-      sleepTimer = setTimeout(() => {
-        setMood("sleeping");
-        setMessage(welcomeCopy.sleeping);
-      }, 11500);
+      sleepTimer = setTimeout(() => setMood("sleeping"), 11500);
     };
 
-    const handlePointer = (event: MouseEvent) => {
-      const x = Math.max(-2, Math.min(2, (event.clientX / window.innerWidth - 0.5) * 5));
-      const y = Math.max(-2, Math.min(2, (event.clientY / window.innerHeight - 0.5) * 5));
-      setPupil({ x, y });
+    const trackEyes = (event: MouseEvent) => {
+      const bounds = mascotRef.current?.getBoundingClientRect();
+      if (bounds) {
+        const eyeCenterX = bounds.left + bounds.width * 0.62;
+        const eyeCenterY = bounds.top + bounds.height * 0.25;
+        const angle = Math.atan2(event.clientY - eyeCenterY, event.clientX - eyeCenterX);
+        setPupil({ x: Math.cos(angle) * 1.5, y: Math.sin(angle) * 1.5 });
+      }
       setActive();
     };
 
     const initialTimer = setTimeout(setActive, 3800);
-    window.addEventListener("mousemove", handlePointer, { passive: true });
+    window.addEventListener("mousemove", trackEyes, { passive: true });
     window.addEventListener("scroll", setActive, { passive: true });
     window.addEventListener("keydown", setActive);
     window.addEventListener("touchstart", setActive, { passive: true });
@@ -50,54 +54,38 @@ export default function CatAssistant({ cvUrl }: { cvUrl: string }) {
     return () => {
       clearTimeout(initialTimer);
       clearTimeout(sleepTimer);
-      window.removeEventListener("mousemove", handlePointer);
+      window.removeEventListener("mousemove", trackEyes);
       window.removeEventListener("scroll", setActive);
       window.removeEventListener("keydown", setActive);
       window.removeEventListener("touchstart", setActive);
     };
-  }, []);
+  }, [answer]);
 
-  const answer = (kind: "about" | "skills" | "resume") => {
-    if (kind === "about") {
-      setMood("normal");
-      setMessage("Rebecca is a people-centred builder, translating customer insight into practical digital experiences.");
-    }
-    if (kind === "skills") {
-      setMood("normal");
-      setMessage("Her strengths include React, TypeScript, data analysis, UI thinking, problem-solving, and calm communication.");
-    }
-    if (kind === "resume") {
-      setMood("excited");
-      setMessage("On it — the CV is opening in a new tab.");
-      window.open(cvUrl, "_blank", "noopener,noreferrer");
-    }
+  const chooseAnswer = (kind: Exclude<CatAnswer, "welcome">) => {
+    setMood(kind === "resume" ? "excited" : "normal");
+    setAnswer(kind);
+    if (kind === "resume") window.open(cvUrl, "_blank", "noopener,noreferrer");
   };
 
   if (!open) {
-    return (
-      <button className="cat-reopen" onClick={() => setOpen(true)} aria-label="Open Rebecca's portfolio assistant">
-        <img src={CAT_IMAGES.normal} alt="Rebecca's cat portfolio guide" />
-      </button>
-    );
+    return <button className="cat-reopen" onClick={() => setOpen(true)} aria-label="Open Rebecca's portfolio assistant"><img src={CAT_IMAGES.normal} alt="Rebecca's cat portfolio guide" /></button>;
   }
 
   return (
     <aside className={`cat-assistant cat-${mood}`} aria-label="Rebecca's portfolio guide">
-      <button className="cat-close" onClick={() => setOpen(false)} aria-label="Close portfolio guide"><X size={14} /></button>
-      <div className="cat-bubble"><span className="cat-status"><MessageCircle size={13} /> Portfolio guide</span><p>{message}</p></div>
-      <div className="cat-portrait" aria-hidden="true">
-        <img src={CAT_IMAGES[mood]} alt="" />
-        {mood === "normal" && (
-          <div className="cat-pupils">
-            <i style={{ transform: `translate(${pupil.x}px, ${pupil.y}px)` }} />
-            <i style={{ transform: `translate(${pupil.x}px, ${pupil.y}px)` }} />
-          </div>
-        )}
+      <div className="cat-copy">
+        <span className="cat-status"><MessageCircle size={13} /> Portfolio guide</span>
+        <p>{mood === "sleeping" && answer === "welcome" ? "I’m recharging for a moment. Move your cursor or use a prompt when you’re ready." : responses[answer]}</p>
       </div>
+      <div className="cat-mascot" ref={mascotRef} aria-hidden="true">
+        <img src={CAT_IMAGES[mood]} alt="" />
+        {mood === "normal" && <><i className="cat-eye cat-eye-left" style={{ transform: `translate(${pupil.x}px, ${pupil.y}px)` }} /><i className="cat-eye cat-eye-right" style={{ transform: `translate(${pupil.x}px, ${pupil.y}px)` }} /></>}
+      </div>
+      <button className="cat-close" onClick={() => setOpen(false)} aria-label="Close portfolio guide"><X size={14} /></button>
       <div className="cat-prompts">
-        <button onClick={() => answer("about")}>Tell me about Rebecca</button>
-        <button onClick={() => answer("skills")}>What are her core skills?</button>
-        <button className="cat-download" onClick={() => answer("resume")}><Download size={13} /> Download résumé</button>
+        <button onClick={() => chooseAnswer("about")}>Tell me about Rebecca</button>
+        <button onClick={() => chooseAnswer("skills")}>What are her core skills?</button>
+        <button className="cat-download" onClick={() => chooseAnswer("resume")}><Download size={13} /> Download résumé</button>
       </div>
     </aside>
   );
