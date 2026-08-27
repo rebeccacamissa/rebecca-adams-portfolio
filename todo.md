@@ -10,3 +10,10 @@
 - [x] Activate the supplied Formspree endpoint and verify the recruiter-focused contact form configuration.
 - [x] Run build checks and review the upgraded page at desktop and mobile widths.
 - [ ] Save the final portfolio revision as a project checkpoint.
+- [x] Replace the visible chatbot panel with a small click-activated walking cat.
+- [x] Remove cursor-tracking pupils and all default chat copy, buttons, and guide framing.
+- [x] Verify the walking mascot interaction on desktop and mobile, then save the revision checkpoint.
+
+## Visual verification notes
+
+The default desktop and mobile views hide all chat copy, prompts, and guide framing. The compact cat traverses the lower edge without blocking the primary content, and a dedicated transparent walking-pose asset has replaced the former seated artwork.
