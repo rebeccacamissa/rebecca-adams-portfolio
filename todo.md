@@ -20,6 +20,9 @@
 - [x] Stage the supplied paw-print graphic as a deployment-safe cursor asset.
 - [x] Apply the global paw-print cursor with a main-pad hotspot and verify it across interactive elements.
 - [ ] Save the custom cursor revision as a project checkpoint.
+- [x] Stage the newly supplied outlined pink paw as a compact cursor asset.
+- [x] Replace the prior cursor URL and verify the new main-pad hotspot styling.
+- [ ] Save the cursor graphic replacement as a project checkpoint.
 
 ## Visual verification notes
 
