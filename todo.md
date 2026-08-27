@@ -13,6 +13,10 @@
 - [x] Replace the visible chatbot panel with a small click-activated walking cat.
 - [x] Remove cursor-tracking pupils and all default chat copy, buttons, and guide framing.
 - [x] Verify the walking mascot interaction on desktop and mobile, then save the revision checkpoint.
+- [x] Replace the current moving mascot image with transparent, character-level animation assets.
+- [x] Implement excited, walking, corner-resting, and inactivity-sleeping mascot states.
+- [x] Verify moving legs, transparent compositing, natural pauses, and click-to-help behaviour across viewport sizes.
+- [ ] Save the animated mascot revision as a project checkpoint.
 
 ## Visual verification notes
 
