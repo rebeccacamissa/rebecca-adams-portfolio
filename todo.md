@@ -17,6 +17,9 @@
 - [x] Implement excited, walking, corner-resting, and inactivity-sleeping mascot states.
 - [x] Verify moving legs, transparent compositing, natural pauses, and click-to-help behaviour across viewport sizes.
 - [ ] Save the animated mascot revision as a project checkpoint.
+- [x] Stage the supplied paw-print graphic as a deployment-safe cursor asset.
+- [x] Apply the global paw-print cursor with a main-pad hotspot and verify it across interactive elements.
+- [ ] Save the custom cursor revision as a project checkpoint.
 
 ## Visual verification notes
 
