@@ -1,3 +1,4 @@
+/* Camel Editorial Atelier: app shell preserves Rebecca's light-first parchment theme with an intentional dark-mode inversion. */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -28,7 +29,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
-        // switchable
+        switchable
       >
         <TooltipProvider>
           <Toaster />
