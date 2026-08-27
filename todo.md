@@ -23,6 +23,9 @@
 - [x] Stage the newly supplied outlined pink paw as a compact cursor asset.
 - [x] Replace the prior cursor URL and verify the new main-pad hotspot styling.
 - [ ] Save the cursor graphic replacement as a project checkpoint.
+- [x] Create a smaller compact version of the outlined paw cursor asset.
+- [x] Update the global cursor URL and hotspot coordinates for the reduced paw size.
+- [ ] Save the smaller cursor adjustment as a project checkpoint.
 
 ## Visual verification notes
 
