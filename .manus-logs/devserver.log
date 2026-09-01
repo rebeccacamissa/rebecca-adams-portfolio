@@ -27,3 +27,7 @@
 [2026-09-01T13:48:33.296Z] ➜  Network: http://169.254.0.21:5173/
 [2026-09-01T13:55:04.678Z] 1:55:04 PM [vite] (client) hmr update /src/App.tsx
 [2026-09-01T13:55:14.496Z] 1:55:14 PM [vite] changed tsconfig file detected: /home/ubuntu/rebecca-adams-portfolio/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+[2026-09-01T13:58:46.149Z] 1:58:46 PM [vite] vite.config.ts changed, restarting server...
+[2026-09-01T13:58:46.205Z] 1:58:46 PM [vite] server restarted.
+[2026-09-01T13:58:56.934Z] 1:58:56 PM [vite] vite.config.ts changed, restarting server...
+[2026-09-01T13:58:56.954Z] 1:58:56 PM [vite] server restarted.

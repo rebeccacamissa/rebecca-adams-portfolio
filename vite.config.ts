@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
 
 function vitePluginStorageProxy(): Plugin {
   return {
@@ -45,11 +46,16 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
+const clientRoot = fileURLToPath(new URL("./client", import.meta.url));
+
 export default defineConfig({
   plugins: [vitePluginStorageProxy(), react()],
   resolve: {
-    alias: { "@": "/home/ubuntu/rebecca-adams-portfolio/client/src" },
+    alias: { "@": fileURLToPath(new URL("./client/src", import.meta.url)) },
   },
-  root: "client",
-  build: { outDir: "../dist", emptyOutDir: true },
+  root: clientRoot,
+  server: {
+    allowedHosts: ["5173-ig328jctzqyaln94otwtj-ac59e55e.us4.manus.computer"],
+  },
+  build: { outDir: fileURLToPath(new URL("./dist", import.meta.url)), emptyOutDir: true },
 });

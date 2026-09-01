@@ -53,3 +53,10 @@ The synchronized desktop preview now renders the editorial hero artwork, portrai
 - [x] Apply a deployment-safe Home module resolution fix.
 - [x] Run the deployment-equivalent build, then save the repair checkpoint.
 
+
+## Vite host and deployment packaging repair
+
+- [x] Merge the supplied `server.allowedHosts` setting into `vite.config.ts`.
+- [x] Verify all active `Home.tsx` and `ThemeContext.tsx` files are present in the project tree and included in the checkpoint.
+- [x] Run a clean build and save a repair checkpoint.
+
