@@ -30,3 +30,19 @@
 ## Visual verification notes
 
 The default desktop and mobile views hide all chat copy, prompts, and guide framing. The compact cat traverses the lower edge without blocking the primary content, and a dedicated transparent walking-pose asset has replaced the former seated artwork.
+
+## Pasted content integration
+
+- [x] Review the newly supplied pasted content and identify applicable portfolio changes.
+- [x] Apply the relevant content or interface updates without diluting the editorial system.
+- [x] Run the live preview check and save the revised portfolio checkpoint.
+
+## Motion implementation notes
+
+Implemented Lenis inertial scrolling, ambient editorial drift, IntersectionObserver reveals, staggered child entrances, animated skill meters with category tabs, count-up impact metrics, a drawn timeline track, a sequential GitHub-style activity dashboard, and tactile case-study hover lift. TypeScript and production build checks pass. The managed preview/checkpoint service currently has no preview URL after the sandbox reset, so live visual verification and checkpoint save remain pending until the project session is re-established.
+
+
+## Motion visual verification
+
+The synchronized desktop preview now renders the editorial hero artwork, portrait, logo, counter row, connected timeline, skill matrix, dark text-led case studies, certificate viewer, GitHub activity dashboard, and recruiter contact panel. The new sections preserve the established camel, parchment, boho-brown, and roast palette. The project build and TypeScript checks pass; the managed preview is available on port 5173 for final interaction testing.
+

@@ -1,0 +1,20 @@
+[2026-09-01T13:39:50.914Z] Starting dev server with command: pnpm run dev
+[2026-09-01T13:39:51.445Z] $ vite --host
+[2026-09-01T13:39:51.695Z] VITE v7.3.6  ready in 207 ms
+[2026-09-01T13:39:51.696Z] ➜  Local:   http://localhost:5173/
+[2026-09-01T13:39:51.696Z] ➜  Network: http://169.254.0.21:5173/
+[2026-09-01T13:40:53.851Z] 1:40:53 PM [vite] vite.config.ts changed, restarting server...
+[2026-09-01T13:40:53.879Z] 1:40:53 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+[2026-09-01T13:40:53.887Z] 1:40:53 PM [vite] server restarted.
+[2026-09-01T13:41:13.552Z] [ELIFECYCLE] Command failed.
+[2026-09-01T13:41:13.558Z] Dev server exited with code -1
+[2026-09-01T13:41:14.630Z] Starting dev server with command: pnpm run dev
+[2026-09-01T13:41:15.205Z] $ vite --host
+[2026-09-01T13:41:15.515Z] 1:41:15 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+[2026-09-01T13:41:15.534Z] VITE v7.3.6  ready in 282 ms
+[2026-09-01T13:41:15.534Z] ➜  Local:   http://localhost:5173/
+[2026-09-01T13:41:15.534Z] ➜  Network: http://169.254.0.21:5173/
+[2026-09-01T13:43:20.059Z] 1:43:20 PM [vite] (client) hmr update /src/App.tsx
+[2026-09-01T13:43:20.059Z] 1:43:20 PM [vite] (client) hmr update /src/index.css
+[2026-09-01T13:43:20.059Z] 1:43:20 PM [vite] (client) page reload src/main.tsx
+[2026-09-01T13:43:20.060Z] 1:43:20 PM [vite] (client) hmr update /src/pages/Home.tsx
