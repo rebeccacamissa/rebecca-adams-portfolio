@@ -46,3 +46,10 @@ Implemented Lenis inertial scrolling, ambient editorial drift, IntersectionObser
 
 The synchronized desktop preview now renders the editorial hero artwork, portrait, logo, counter row, connected timeline, skill matrix, dark text-led case studies, certificate viewer, GitHub activity dashboard, and recruiter contact panel. The new sections preserve the established camel, parchment, boho-brown, and roast palette. The project build and TypeScript checks pass; the managed preview is available on port 5173 for final interaction testing.
 
+
+## Deployment repair
+
+- [x] Inspect the Home page file, App entrypoint, and Vite resolve configuration.
+- [x] Apply a deployment-safe Home module resolution fix.
+- [x] Run the deployment-equivalent build, then save the repair checkpoint.
+
