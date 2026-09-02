@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import CatAssistant from "@/components/CatAssistant";
+import { fetchGitHubActivity, formatRelativeDate, GITHUB_LOGIN, type GitHubActivity, type GitHubProfile, type GitHubStatus } from "@/lib/github";
 
 const CV_URL = "/manus-storage/Rebecca-Adams-CV_31bdf2d7.pdf";
 const HEADSHOT_URL = "/manus-storage/rebecca-adams-headshot_2abac0ae.jpeg";
@@ -141,10 +142,28 @@ export default function Home() {
   const [credentialsRef, credentialsVisible] = useInView<HTMLElement>();
   const [impactRef, impactVisible] = useInView<HTMLDivElement>();
   const [githubRef, githubVisible] = useInView<HTMLDivElement>();
+  const [githubStatus, setGithubStatus] = useState<GitHubStatus>("loading");
+  const [githubProfile, setGithubProfile] = useState<GitHubProfile | null>(null);
+  const [githubActivity, setGithubActivity] = useState<GitHubActivity[]>([]);
   const projectsCount = useCountUp(3, impactVisible);
   const certificatesCount = useCountUp(7, impactVisible);
   const skillsCount = useCountUp(15, impactVisible);
   const selectedCertificate = certificates[activeCertificate];
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchGitHubActivity(controller.signal)
+      .then(({ profile, activity }) => {
+        setGithubProfile(profile);
+        setGithubActivity(activity);
+        setGithubStatus("ready");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setGithubStatus("error");
+      });
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     let lenis: { destroy: () => void } | undefined;
@@ -210,11 +229,11 @@ export default function Home() {
 
       <section ref={credentialsRef} className={`credentials-section section-wrap reveal ${credentialsVisible ? "is-visible" : ""}`} aria-labelledby="credentials-title"><div className="section-index"><span>05</span><i /> Certificates</div><div className="credentials-heading"><div><p className="eyebrow">Coursera learning record</p><h2 id="credentials-title">Credentials,<br /><em>on display.</em></h2></div><p>Select a certificate to read it directly on the page. Each card is ready for its dedicated source document, creating a clear, employer-friendly evidence library.</p></div><div className="certificate-library"><div className="certificate-list" role="tablist" aria-label="Coursera certificate documents">{certificates.map((certificate, index) => <button key={certificate.title} role="tab" aria-selected={activeCertificate === index} onClick={() => setActiveCertificate(index)} className={`certificate-tab reveal-child ${activeCertificate === index ? "is-active" : ""}`} style={{ "--stagger": `${index * 70}ms` } as CSSProperties}><span>{String(index + 1).padStart(2, "0")}</span><div><b>{certificate.title}</b><i>{certificate.status}</i></div><ArrowRight size={16} /></button>)}</div><div className="certificate-viewer" role="tabpanel" aria-label={selectedCertificate.title}><div className="viewer-toolbar"><span><Award size={15} /> Coursera certificate</span><a href={selectedCertificate.url} target="_blank" rel="noreferrer">Open source <ExternalLink size={14} /></a></div>{selectedCertificate.image ? <img className="certificate-image" src={selectedCertificate.url} alt={`${selectedCertificate.title} certificate`} /> : <iframe title={`${selectedCertificate.title} certificate`} src={`${selectedCertificate.url}#view=FitH`} />}</div></div></section>
 
-      <div ref={githubRef} className={`github-dashboard section-wrap reveal ${githubVisible ? "is-visible" : ""}`} aria-label="GitHub activity"><div><p className="eyebrow">Open-source rhythm</p><h2>Work in <em>public.</em></h2><p>Selected repositories, experiments, and learning artefacts live on GitHub. The pulse below is a small visual index of the consistency behind the work.</p><a href="https://github.com/rebeccacamissa" target="_blank" rel="noreferrer">Visit GitHub <Github size={15} /></a></div><div className="github-grid" aria-hidden="true">{Array.from({ length: 56 }, (_, index) => <i key={index} className={`github-cell level-${(index * 7 + 3) % 5}`} style={{ "--stagger": `${index * 18}ms` } as CSSProperties} />)}</div><div className="github-meta"><span>Rebecca Adams</span><span>GitHub activity index · 2025—26</span></div></div>
+      <div ref={githubRef} className={`github-dashboard section-wrap reveal ${githubVisible ? "is-visible" : ""}`} aria-label="GitHub activity"><div className="github-copy"><p className="eyebrow">Live GitHub activity</p><h2>Work in <em>public.</em></h2><p>Adam and this portfolio read Rebecca’s public GitHub feed directly, so visitors can see what she has been shipping most recently.</p><div className="github-statline"><strong>{githubProfile?.public_repos ?? "—"}</strong><span>public repositories</span><strong>{githubActivity.length || "—"}</strong><span>recent commits found</span></div><a href={`https://github.com/${GITHUB_LOGIN}`} target="_blank" rel="noreferrer">Visit GitHub <Github size={15} /></a></div><div className="github-feed" aria-live="polite"><div className="github-feed-heading"><span>Latest commit notes</span><span>{githubStatus === "loading" ? "Refreshing…" : githubStatus === "ready" ? "Live now" : "Temporarily unavailable"}</span></div>{githubStatus === "loading" && <p className="github-feed-empty">Reading the public activity feed…</p>}{githubStatus === "error" && <p className="github-feed-empty">GitHub’s public feed is taking a quiet moment. Adam will still answer from Rebecca’s portfolio profile.</p>}{githubStatus === "ready" && githubActivity.length === 0 && <p className="github-feed-empty">No recent public commits were returned. Visit GitHub for the full repository history.</p>}{githubStatus === "ready" && githubActivity.slice(0, 5).map((activity) => <a className="github-commit" key={activity.id} href={activity.commitUrl} target="_blank" rel="noreferrer"><span className="github-commit-dot" /><div><strong>{activity.message}</strong><small>{activity.repo} · {formatRelativeDate(activity.date)} · {activity.sha}</small></div><ExternalLink size={14} /></a>)}</div><div className="github-meta"><span>{githubProfile?.name ?? "Rebecca Adams"} · @{GITHUB_LOGIN}</span><span>{githubStatus === "ready" ? "Public commits · refreshed on visit" : "Public activity feed"}</span></div></div>
 
       <section className="contact-section" id="contact" aria-labelledby="contact-title"><div className="contact-left"><div className="section-index contact-index"><span>06</span><i /> Say hello</div><p className="eyebrow">Open to potential employers &amp; recruiters</p><h2 id="contact-title">Let’s make<br />something <em>clearer.</em></h2><p className="contact-note">This inbox is open to hiring managers, recruiters, and collaborators looking for a thoughtful junior web developer. If you see a role where curiosity, reliability, and people-centred problem-solving would add value, I would be glad to connect.</p><div className="social-links"><a href="mailto:camissa.adams17@gmail.com"><Mail size={16} /> Email me</a><a href="https://github.com/rebeccacamissa" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a><a href="https://www.linkedin.com/in/rebecca-adams-tech" target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a></div></div><form className="contact-form" onSubmit={submitForm}><div className="form-heading"><span>New message</span><p>Your message will be securely routed to Rebecca’s inbox.</p></div><label>Your name<input name="name" required value={form.name} onChange={event => setForm({ ...form, name: event.target.value })} placeholder="How should I say hello?" /></label><label>Email address<input name="email" required type="email" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" /></label><label>Message<textarea name="message" required value={form.message} onChange={event => setForm({ ...form, message: event.target.value })} placeholder="What would you like to build?" rows={4} /></label><button className="button-send" type="submit" disabled={formState === "sending"}>{formState === "sending" ? "Sending…" : "Send message"} <Send size={17} /></button>{formState === "success" && <p className="form-success">Thank you — your message has been sent directly to Rebecca.</p>}{formState === "error" && <p className="form-error">Your message could not be sent. Please try again or email Rebecca directly.</p>}{formState === "unconfigured" && <p className="form-error">The secure form endpoint still needs to be connected. Please email Rebecca directly for now.</p>}</form></section>
 
-      <footer><span>© {new Date().getFullYear()} Rebecca Adams</span><span>Built with care in Cape Town</span><a href="#top">Back to top <ArrowRight size={13} /></a></footer><CatAssistant cvUrl={CV_URL} />
+      <footer><span>© {new Date().getFullYear()} Rebecca Adams</span><span>Built with care in Cape Town</span><a href="#top">Back to top <ArrowRight size={13} /></a></footer><CatAssistant cvUrl={CV_URL} githubActivity={githubActivity} githubStatus={githubStatus} />
     </main>
   );
 }

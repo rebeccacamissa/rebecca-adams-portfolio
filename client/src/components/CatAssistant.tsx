@@ -1,6 +1,7 @@
 /* Camel Editorial Atelier: Adam is a stationary, transparent portfolio companion; the drawer is intentional, glassy, and completely hidden until the visitor activates it. */
-import { Download, MessageCircle, Send, X } from "lucide-react";
+import { Download, ExternalLink, MessageCircle, Send, X } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
+import { formatRelativeDate, type GitHubActivity, type GitHubStatus } from "@/lib/github";
 
 type PromptKey = "about" | "skills" | "cases" | "resume";
 type MascotMode = "excited" | "awake" | "sleeping";
@@ -26,15 +27,24 @@ const promptLabels: Array<{ key: PromptKey; label: string }> = [
   { key: "resume", label: "Download Resume" },
 ];
 
-function answerForQuestion(question: string): string {
+function githubResponse(activity: GitHubActivity[], status: GitHubStatus): string {
+  if (status === "loading") return "I’m checking Rebecca’s public GitHub activity now. Give me a moment and I’ll bring back the latest commit notes from her repositories.";
+  if (status === "error") return "GitHub’s public activity feed is temporarily unavailable, so I can’t safely claim what Rebecca shipped most recently. You can still browse her repositories directly at github.com/rebeccacamissa, and I’ll keep the rest of her portfolio profile available here.";
+  if (activity.length === 0) return "Rebecca’s public GitHub feed did not return any recent commits just now. Her repositories are still available at github.com/rebeccacamissa for the full history.";
+  const notes = activity.slice(0, 3).map((item) => `${item.repo}: “${item.message}” (${formatRelativeDate(item.date)})`).join("; ");
+  return `Here are Rebecca’s latest public commit notes: ${notes}. Each item links back to its original GitHub commit in the live activity panel, so you can follow the work in context rather than relying on a static summary.`;
+}
+
+function answerForQuestion(question: string, activity: GitHubActivity[], status: GitHubStatus): string {
   const normalized = question.toLowerCase();
+  if (normalized.includes("github") || normalized.includes("commit") || normalized.includes("latest") || normalized.includes("recent") || normalized.includes("shipped") || normalized.includes("activity")) return githubResponse(activity, status);
   if (normalized.includes("skill") || normalized.includes("good at") || normalized.includes("strength")) return responses.skills;
   if (normalized.includes("project") || normalized.includes("case") || normalized.includes("bantu") || normalized.includes("kumb") || normalized.includes("atelier")) return responses.cases;
   if (normalized.includes("cv") || normalized.includes("resume") || normalized.includes("hire") || normalized.includes("recruit")) return responses.resume;
   return responses.about;
 }
 
-export default function CatAssistant({ cvUrl }: { cvUrl: string }) {
+export default function CatAssistant({ cvUrl, githubActivity = [], githubStatus = "loading" }: { cvUrl: string; githubActivity?: GitHubActivity[]; githubStatus?: GitHubStatus }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<MascotMode>("excited");
   const [draft, setDraft] = useState("");
@@ -70,7 +80,7 @@ export default function CatAssistant({ cvUrl }: { cvUrl: string }) {
     event.preventDefault();
     const question = draft.trim();
     if (!question) return;
-    setMessages((current) => [...current, { role: "visitor", text: question }, { role: "adam", text: answerForQuestion(question) }]);
+    setMessages((current) => [...current, { role: "visitor", text: question }, { role: "adam", text: answerForQuestion(question, githubActivity, githubStatus) }]);
     setDraft("");
   };
 

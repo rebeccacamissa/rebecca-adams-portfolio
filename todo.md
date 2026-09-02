@@ -78,3 +78,11 @@ The synchronized desktop preview now renders the editorial hero artwork, portrai
 
 The refreshed desktop and mobile previews show Adam as a small, fixed bottom-right mascot with no visible image rectangle. The assistant drawer and prompt chips remain hidden until click or tap. The desktop and mobile compositions preserve the hero hierarchy, and the production build plus TypeScript checks pass.
 
+
+## Live GitHub activity integration
+
+- [x] Review the current GitHub activity section and Adam response logic.
+- [x] Add a deployment-safe public GitHub activity data path with loading and fallback states.
+- [x] Connect recent commits to Adam’s visitor responses.
+- [x] Verify activity rendering and build, then save a checkpoint.
+
