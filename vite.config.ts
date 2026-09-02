@@ -55,7 +55,10 @@ export default defineConfig({
   },
   root: clientRoot,
   server: {
-    allowedHosts: ["5173-ig328jctzqyaln94otwtj-ac59e55e.us4.manus.computer"],
+    allowedHosts: [
+      "5173-ig328jctzqyaln94otwtj-ac59e55e.us4.manus.computer",
+      "5173-i5677lyqm6fzf3qljcixw-3a5536d8.us4.manus.computer",
+    ],
   },
   build: { outDir: fileURLToPath(new URL("./dist", import.meta.url)), emptyOutDir: true },
 });

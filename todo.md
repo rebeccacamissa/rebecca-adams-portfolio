@@ -86,3 +86,10 @@ The refreshed desktop and mobile previews show Adam as a small, fixed bottom-rig
 - [x] Connect recent commits to Adam’s visitor responses.
 - [x] Verify activity rendering and build, then save a checkpoint.
 
+
+## Vite blocked-host repair
+
+- [x] Inspect the existing Vite server configuration.
+- [x] Add `5173-i5677lyqm6fzf3qljcixw-3a5536d8.us4.manus.computer` to `server.allowedHosts`.
+- [x] Run the production build and save the repair checkpoint.
+
