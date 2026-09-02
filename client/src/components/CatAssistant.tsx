@@ -1,73 +1,116 @@
-/* Camel Editorial Atelier: a transparent, multi-frame cat sprite gives the portfolio a living edge detail; help remains entirely visitor-initiated. */
-import { Download, X } from "lucide-react";
-import { useEffect, useRef, useState, type AnimationEvent } from "react";
+/* Camel Editorial Atelier: Adam is a stationary, transparent portfolio companion; the drawer is intentional, glassy, and completely hidden until the visitor activates it. */
+import { Download, MessageCircle, Send, X } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
 
-type CatAnswer = "about" | "skills" | "resume";
-type CatPhase = "excited" | "walking" | "resting" | "sleeping";
-type Direction = "right" | "left";
+type PromptKey = "about" | "skills" | "cases" | "resume";
+type MascotMode = "excited" | "awake" | "sleeping";
+type ChatMessage = { role: "visitor" | "adam"; text: string };
 
-const CAT_SPRITE_URL = "/manus-storage/rebecca-cat-walk-sprite_a7307c84.png";
-
-const responses: Record<CatAnswer, string> = {
-  about: "Rebecca is an emerging junior web developer with a resilient, people-centred foundation. After matriculating in 2024, she entered the workforce to support her family, building composure and accountability in customer-facing and operations roles. That experience sparked a fascination with creative technology: she now uses CAPACITI’s intensive programme to turn practical insight into thoughtful, user-aware digital work.",
-  skills: "Rebecca combines the reliability of a customer-service professional with a growing digital toolkit. She brings precise data handling, Google Workspace and Microsoft 365 fluency, UX-minded problem-solving, and a strong instinct for clear communication. Just as importantly, her teamwork, time management, adaptability, and rapid-learning mindset help her contribute steadily in fast-moving environments while she continues to build technical depth.",
-  resume: "Rebecca’s CV has opened in a new tab. It offers a focused view of her operations experience, data and digital-skills training, customer-service strengths, and current direction as a junior web developer. Thank you for taking the time to learn more about the person behind the portfolio.",
+const CAT_ASSETS: Record<Exclude<MascotMode, "awake"> | "awake", string> = {
+  excited: "/manus-storage/rebecca-cat-excited-transparent_ccf7f184.png",
+  awake: "/manus-storage/rebecca-cat-awake-transparent_106172d1.png",
+  sleeping: "/manus-storage/rebecca-cat-sleeping-transparent_2a3853b4.png",
 };
+
+const responses: Record<PromptKey, string> = {
+  about: "Rebecca Adams is a Junior Web Developer whose career is shaped by resilience, curiosity, and a deeply people-first way of thinking. After matriculating in 2024, she entered customer-facing work to support her family and built composure, accountability, and practical problem-solving in fast-moving environments. That foundation led her toward creative technology, and she is now accelerating her growth through the CAPACITI 12-month programme, where she is turning real human needs into thoughtful web and AI experiences.",
+  skills: "Rebecca brings together the reliability of a customer-service professional and the curiosity of an emerging technologist. Her strongest workplace qualities are Teamwork & Collaboration, Time Management, Adaptability, Rapid Learning – High Attention to Detail, Professional Verbal/Written English, and Customer Enquiry Handling. She also works with responsive UI thinking, GitHub, data analysis, Advanced Excel, Google Workspace, Microsoft 365, HubSpot CRM, UX-minded problem-solving, and clear digital communication.",
+  cases: "Rebecca’s selected work explores how a good digital product can remove friction from everyday decisions. Bantu Connect turns a fragmented local beauty sector into a hyper-local marketplace with a Smart Budget Matcher, Power-Ready toggle, and zero-friction WhatsApp booking. Kumbayaaa replaces travel-planning form fatigue with conversational AI that brings time savings and financial clarity to the planning journey. Atelier AI Workspace brings email, task planning, and drafting into one focused productivity environment, reducing drafting time by 80%.",
+  resume: "Rebecca’s CV is available to view or download in a new tab. It gives employers a concise view of her customer-facing and operations experience, data and digital-skills training, CAPACITI development, and transition into junior web development. If you would like to discuss a role, project, or internship, the quickest route is the contact form at the bottom of this page or Rebecca’s LinkedIn profile.",
+};
+
+const promptLabels: Array<{ key: PromptKey; label: string }> = [
+  { key: "about", label: "Tell me about Rebecca" },
+  { key: "skills", label: "What are your core skills?" },
+  { key: "cases", label: "Case Studies Overview" },
+  { key: "resume", label: "Download Resume" },
+];
+
+function answerForQuestion(question: string): string {
+  const normalized = question.toLowerCase();
+  if (normalized.includes("skill") || normalized.includes("good at") || normalized.includes("strength")) return responses.skills;
+  if (normalized.includes("project") || normalized.includes("case") || normalized.includes("bantu") || normalized.includes("kumb") || normalized.includes("atelier")) return responses.cases;
+  if (normalized.includes("cv") || normalized.includes("resume") || normalized.includes("hire") || normalized.includes("recruit")) return responses.resume;
+  return responses.about;
+}
 
 export default function CatAssistant({ cvUrl }: { cvUrl: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [answer, setAnswer] = useState<CatAnswer | null>(null);
-  const [phase, setPhase] = useState<CatPhase>("excited");
-  const [direction, setDirection] = useState<Direction>("right");
-  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [mode, setMode] = useState<MascotMode>("excited");
+  const [draft, setDraft] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
-    const beginIdleCountdown = () => {
-      if (idleTimer.current) clearTimeout(idleTimer.current);
-      setPhase(current => current === "sleeping" ? "walking" : current);
-      idleTimer.current = setTimeout(() => setPhase("sleeping"), 15000);
-    };
-
-    const events: Array<keyof WindowEventMap> = ["mousemove", "scroll", "keydown", "touchstart"];
-    events.forEach(event => window.addEventListener(event, beginIdleCountdown, { passive: true }));
-    beginIdleCountdown();
-    return () => {
-      if (idleTimer.current) clearTimeout(idleTimer.current);
-      events.forEach(event => window.removeEventListener(event, beginIdleCountdown));
-    };
+    const timer = window.setTimeout(() => setMode("awake"), 3200);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (phase !== "excited" && phase !== "resting") return;
-    const timer = setTimeout(() => {
-      if (phase === "resting") setDirection(current => current === "right" ? "left" : "right");
-      setPhase("walking");
-    }, phase === "excited" ? 3000 : 4000);
-    return () => clearTimeout(timer);
-  }, [phase]);
+    let idleTimer: number | undefined;
+    const resetIdle = () => {
+      if (idleTimer) window.clearTimeout(idleTimer);
+      setMode((current) => current === "sleeping" ? "awake" : current);
+      idleTimer = window.setTimeout(() => setMode("sleeping"), 15000);
+    };
+    const events: Array<keyof WindowEventMap> = ["mousemove", "scroll", "keydown", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetIdle, { passive: true }));
+    resetIdle();
+    return () => {
+      if (idleTimer) window.clearTimeout(idleTimer);
+      events.forEach((event) => window.removeEventListener(event, resetIdle));
+    };
+  }, []);
 
-  const chooseAnswer = (kind: CatAnswer) => {
-    setAnswer(kind);
-    if (kind === "resume") window.open(cvUrl, "_blank", "noopener,noreferrer");
+  const choosePrompt = (key: PromptKey) => {
+    setMessages((current) => [...current, { role: "visitor", text: promptLabels.find((item) => item.key === key)?.label ?? "Tell me more" }, { role: "adam", text: responses[key] }]);
+    if (key === "resume") window.open(cvUrl, "_blank", "noopener,noreferrer");
   };
 
-  const startRest = (event: AnimationEvent<HTMLButtonElement>) => {
-    if (event.currentTarget === event.target && event.animationName.startsWith("cat-cross") && phase === "walking") setPhase("resting");
+  const submitQuestion = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const question = draft.trim();
+    if (!question) return;
+    setMessages((current) => [...current, { role: "visitor", text: question }, { role: "adam", text: answerForQuestion(question) }]);
+    setDraft("");
+  };
+
+  const openOrClose = () => {
+    setMode((current) => current === "sleeping" ? "awake" : current);
+    setIsOpen((current) => !current);
   };
 
   return (
-    <aside className="cat-assistant" aria-label="Rebecca's portfolio helper">
+    <aside className={`cat-assistant ${isOpen ? "is-open" : ""}`} aria-label="Adam, Rebecca's portfolio helper">
       {isOpen && (
-        <section className="cat-dialog" aria-live="polite">
-          <button className="cat-close" onClick={() => setIsOpen(false)} aria-label="Close helper"><X size={14} /></button>
-          <p className="cat-dialog-kicker">A small guide, when you need it</p>
-          <p className="cat-answer">{answer ? responses[answer] : "Choose a topic to discover more about Rebecca’s journey and strengths."}</p>
-          <div className="cat-options"><button onClick={() => chooseAnswer("about")}>About Rebecca</button><button onClick={() => chooseAnswer("skills")}>Core skills</button><button onClick={() => chooseAnswer("resume")}><Download size={13} /> Download résumé</button></div>
+        <section className="cat-dialog" role="dialog" aria-modal="false" aria-label="Ask Adam about Rebecca" aria-live="polite">
+          <div className="cat-dialog-header">
+            <div>
+              <p className="cat-dialog-kicker">Adam / portfolio companion</p>
+              <h2>What can I help you find?</h2>
+            </div>
+            <button className="cat-close" onClick={() => setIsOpen(false)} aria-label="Close Adam"><X size={15} /></button>
+          </div>
+          <div className="cat-transcript">
+            {messages.length === 0 ? (
+              <p className="cat-empty">Ask about Rebecca’s journey, strengths, selected projects, or résumé. I’ll point you in the right direction.</p>
+            ) : messages.map((message, index) => (
+              <p key={`${message.role}-${index}`} className={`cat-message cat-message-${message.role}`}>{message.text}</p>
+            ))}
+          </div>
+          <div className="cat-options" aria-label="Suggested questions">
+            {promptLabels.map((prompt) => <button key={prompt.key} onClick={() => choosePrompt(prompt.key)}>{prompt.key === "resume" && <Download size={12} />}{prompt.label}</button>)}
+          </div>
+          <form className="cat-input-row" onSubmit={submitQuestion}>
+            <label className="sr-only" htmlFor="adam-question">Ask Adam a question</label>
+            <input id="adam-question" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Ask a question…" autoComplete="off" />
+            <button type="submit" aria-label="Send question"><Send size={14} /></button>
+          </form>
+          <p className="cat-drawer-foot"><MessageCircle size={12} /> For opportunities, use the contact form below.</p>
         </section>
       )}
-      <button className={`cat-walker cat-${phase} facing-${direction}`} onClick={() => { setIsOpen(open => !open); setAnswer(null); }} onAnimationEnd={startRest} aria-expanded={isOpen} aria-label={isOpen ? "Close Rebecca's portfolio helper" : "Open Rebecca's portfolio helper"}>
-        <span className="cat-sprite" style={{ backgroundImage: `url(${CAT_SPRITE_URL})` }} aria-hidden="true" />
-        <span className="sr-only">Open Rebecca's portfolio helper</span>
+      <button className={`cat-mascot cat-mode-${mode}`} onClick={openOrClose} aria-expanded={isOpen} aria-label={isOpen ? "Close Adam's helper" : "Open Adam's helper"}>
+        <span className="cat-mascot-art" style={{ backgroundImage: `url(${CAT_ASSETS[mode]})` }} aria-hidden="true" />
+        <span className="sr-only">{isOpen ? "Close Adam's helper" : "Open Adam's helper"}</span>
       </button>
     </aside>
   );

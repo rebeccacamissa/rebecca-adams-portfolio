@@ -60,3 +60,21 @@ The synchronized desktop preview now renders the editorial hero artwork, portrai
 - [x] Verify all active `Home.tsx` and `ThemeContext.tsx` files are present in the project tree and included in the checkpoint.
 - [x] Run a clean build and save a repair checkpoint.
 
+
+## Second pasted-content integration
+
+- [ ] Read `pasted_content_2.txt` and identify the intended portfolio fix.
+- [ ] Apply the relevant change while preserving existing functionality.
+- [ ] Run build and visual checks, then save the updated checkpoint.
+
+
+## Stationary Adam refinement
+
+- [ ] Remove the visible rectangular background from Adam's state artwork while preserving the transparent character silhouette.
+- [ ] Verify the stationary widget and drawer at desktop and mobile widths, then save the updated checkpoint.
+
+
+## Stationary Adam visual verification
+
+The refreshed desktop and mobile previews show Adam as a small, fixed bottom-right mascot with no visible image rectangle. The assistant drawer and prompt chips remain hidden until click or tap. The desktop and mobile compositions preserve the hero hierarchy, and the production build plus TypeScript checks pass.
+
