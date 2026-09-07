@@ -179,3 +179,11 @@ The mentorship carousel must not present invented testimonials, ratings, or endo
 - [x] Add keyboard ArrowLeft/ArrowRight navigation and focus-friendly scrolling for the Social Proof carousel.
 - [x] Create and validate a reusable skill documenting this portfolio enhancement workflow through the skill-creator process.
 - [x] Run typecheck/build and responsive visual checks before saving the portfolio checkpoint.
+
+
+## Social Proof attribution correction
+
+- [x] Replace Princely, Musa, and Sinawo placeholder LinkedIn destinations with the supplied profile URLs.
+- [x] Mark Laverne as having no LinkedIn profile instead of linking to a generic destination.
+- [x] Attribute the Dev Nova quote to the Web Development Team group rather than an individual colleague.
+- [x] Run build and responsive visual checks, then save the correction checkpoint.

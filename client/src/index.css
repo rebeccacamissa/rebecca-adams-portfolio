@@ -172,3 +172,7 @@ body, body button, body a, body input, body textarea { cursor:var(--pink-cursor)
 @keyframes resume-check-pop { 0% { transform:scale(.55) rotate(-18deg); opacity:0; } 65% { transform:scale(1.12) rotate(5deg); opacity:1; } 100% { transform:scale(1) rotate(0); } }
 @keyframes resume-confetti { 0% { opacity:0; transform:translateY(3px) rotate(0) scale(.6); } 25% { opacity:1; } 100% { opacity:0; transform:translateY(-10px) rotate(0) scale(1); } }
 @media (prefers-reduced-motion:reduce) { .resume-download-feedback, .resume-download-feedback b, .resume-download-feedback i { animation:none; } }
+
+
+/* Social Proof attribution correction: distinguish real profile links from a truthful no-profile state. */
+.growth-linkedin.is-unavailable { color:color-mix(in srgb,var(--boho) 45%,transparent); border-style:dashed; cursor:default; }
