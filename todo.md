@@ -114,3 +114,23 @@ The refreshed desktop and mobile previews show Adam as a small, fixed bottom-rig
 
 The published portfolio is now rendering actual public commit links for rebeccacamissa, including repository names, messages, dates, and commit URLs. Direct GitHub API checks returned 200 responses with `access-control-allow-origin: *` and remaining rate-limit capacity, so the earlier fallback was not caused by an invalid username, endpoint, CORS policy, or exhausted quota. The helper click verification was interrupted because the browser navigated to the Manus homepage; the portfolio itself remains healthy.
 
+
+## Strict QA from pasted_content_3.txt
+
+- [x] Read and map every checklist requirement to a portfolio feature.
+- [x] Test desktop and mobile layout, cursor, theme, navigation, animation states, chatbot, GitHub activity, certificates, contact form, and downloads.
+- [x] Fix every confirmed discrepancy and rerun the affected tests.
+- [x] Run final build and live checks and save the QA checkpoint.
+
+
+## QA visual findings
+
+Desktop and mobile full-page previews preserve the editorial hierarchy, responsive timeline, expanded text-led case studies, skill matrix, credentials area, GitHub section, contact form, and small bottom-right Adam trigger. The checklist’s old paw-cursor assertion conflicts with the latest approved pink standard-arrow requirement, so the arrow is retained. The missing SPA `_redirects` rule has been corrected. The credential list currently contains seven entries, but the checklist names eight course titles and the supplied seventh asset visibly reads Business Analysis Fundamentals rather than Introduction into Data Analysis; this must be reported rather than mislabelled. A real Formspree submission still requires confirmation before sending an external test message.
+
+
+## Confirmed QA closeout
+
+- [x] Confirm the final credential is labelled Business Analysis Fundamentals everywhere it appears.
+- [x] Submit the authorized live Formspree test and verify the endpoint response.
+- [x] Rerun affected QA/build checks and save the final checkpoint.
+

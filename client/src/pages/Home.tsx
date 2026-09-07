@@ -84,7 +84,7 @@ const certificates = [
   { title: "Google AI Essentials", url: "/manus-storage/Google-AI-Essentials_Rebecca-Adams_0442c889.pdf", status: "Certificate PDF" },
   { title: "Introduction To Generative AI", url: "/manus-storage/Introduction-to-Generative-AI_Rebecca-Adams_1dc93601.pdf", status: "Certificate PDF" },
   { title: "Prompt Engineering Basics", url: "/manus-storage/Prompt-Engineering-Basics_Rebecca-Adams_edfd51ea.pdf", status: "Certificate PDF" },
-  { title: "Business Analysis Fundamentals", url: "/manus-storage/Business-Analysis-Fundamentals_Rebecca-Adams_4474b629.webp", status: "Certificate image", image: true },
+  { title: "Business Analysis Fundamentals", url: "/manus-storage/Business-Analysis-Fundamentals_Rebecca-Adams_4474b629.webp", status: "Microsoft · Certificate image", image: true },
   { title: "Python for Data Science, AI & Development", url: "/manus-storage/Python-for-Data-Science-AI-and-Development_Rebecca-Adams_7317dfde.pdf", status: "Certificate PDF" },
   { title: "Supervised Machine Learning", url: "/manus-storage/Supervised-Machine-Learning_Rebecca-Adams_0e8f3738.pdf", status: "Certificate PDF" },
 ];
