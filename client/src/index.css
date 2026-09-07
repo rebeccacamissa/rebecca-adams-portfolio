@@ -155,3 +155,20 @@ body, body button, body a, body input, body textarea { cursor:var(--pink-cursor)
 .growth-card > p:not(.growth-label) { font-family:"DM Serif Display",Georgia,serif; font-size:1rem; line-height:1.5; color:color-mix(in srgb,var(--foreground) 86%,transparent); }
 .growth-card .growth-placeholder { font-family:"Manrope",Arial,sans-serif; font-size:.55rem; }
 @media (max-width:680px) { .hero-text-resume { order:4; align-self:flex-start; } .growth-carousel { padding-right:2rem; } }
+
+
+/* Resume confirmation and accessible Social Proof controls: keep feedback brief, tactile, and restrained within the Camel Editorial Atelier system. */
+.resume-download-feedback { position:relative; display:inline-flex; align-items:center; gap:.35rem; color:var(--boho); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; font-weight:800; animation:resume-feedback-in .42s cubic-bezier(.23,1,.32,1) both; }
+.resume-download-feedback b { width:1.2rem; height:1.2rem; display:grid; place-items:center; border:1px solid var(--boho); border-radius:50%; font-size:.7rem; color:var(--roast); background:var(--camel); animation:resume-check-pop .58s cubic-bezier(.23,1,.32,1) both; }
+.resume-download-feedback i { position:absolute; width:3px; height:7px; border-radius:3px; background:var(--boho); left:.55rem; top:.18rem; transform-origin:50% 1rem; animation:resume-confetti .78s ease-out both; }
+.resume-download-feedback i:nth-of-type(1) { transform:rotate(-54deg); animation-delay:.04s; }.resume-download-feedback i:nth-of-type(2) { transform:rotate(0deg); animation-delay:.1s; }.resume-download-feedback i:nth-of-type(3) { transform:rotate(54deg); animation-delay:.16s; }
+.growth-carousel:focus-visible { outline:2px solid var(--boho); outline-offset:7px; }
+.growth-card-meta { display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; margin-bottom:2.8rem; }
+.growth-card-meta .growth-label { margin:0; }.growth-card-meta small { display:block; margin-top:.3rem; font-size:.58rem; color:color-mix(in srgb,var(--foreground) 62%,transparent); letter-spacing:.02em; }
+.growth-linkedin { width:2rem; height:2rem; flex:none; display:grid; place-items:center; color:var(--boho); border:1px solid color-mix(in srgb,var(--boho) 42%,transparent); border-radius:50%; transition:background .2s ease, color .2s ease, transform .2s ease; }
+.growth-linkedin:hover, .growth-linkedin:focus-visible { background:var(--roast); color:var(--camel); transform:translateY(-2px); }
+.growth-card-meta + h3 { margin-top:0; }
+@keyframes resume-feedback-in { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
+@keyframes resume-check-pop { 0% { transform:scale(.55) rotate(-18deg); opacity:0; } 65% { transform:scale(1.12) rotate(5deg); opacity:1; } 100% { transform:scale(1) rotate(0); } }
+@keyframes resume-confetti { 0% { opacity:0; transform:translateY(3px) rotate(0) scale(.6); } 25% { opacity:1; } 100% { opacity:0; transform:translateY(-10px) rotate(0) scale(1); } }
+@media (prefers-reduced-motion:reduce) { .resume-download-feedback, .resume-download-feedback b, .resume-download-feedback i { animation:none; } }

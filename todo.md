@@ -170,3 +170,12 @@ The mentorship carousel must not present invented testimonials, ratings, or endo
 - [x] Replace Social Proof placeholder cards with the five colleague quotes supplied by Rebecca.
 - [x] Add a deployment-safe plain-text resume asset and a secondary Hero download action.
 - [x] Run typecheck/build and responsive visual checks before saving a checkpoint.
+
+
+## Resume feedback, accessible testimonials, and reusable workflow skill
+
+- [x] Add an immediate checkmark/confetti confirmation after either Hero resume download is activated, with reduced-motion support.
+- [x] Add placeholder job titles and clickable LinkedIn icon links to each colleague testimonial, using clearly labelled placeholder profile URLs until real URLs are supplied.
+- [x] Add keyboard ArrowLeft/ArrowRight navigation and focus-friendly scrolling for the Social Proof carousel.
+- [x] Create and validate a reusable skill documenting this portfolio enhancement workflow through the skill-creator process.
+- [x] Run typecheck/build and responsive visual checks before saving the portfolio checkpoint.

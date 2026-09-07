@@ -1,5 +1,5 @@
 /* Camel Editorial Atelier: asymmetric editorial folio, warm parchment surfaces, expressive DM Serif display type, and precision Manrope utility text. */
-import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from "react";
 import {
   ArrowDownRight,
   ArrowRight,
@@ -35,11 +35,11 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/xnpqaoby";
 const TYPEWRITER_PHRASES = ["Junior Web Developer", "AI Solutions Integrator", "Creative Problem Solver", "CAPACITI Tech Fellow"];
 
 const growthSlots = [
-  { label: "Princely M.", title: "Professional, reliable, supportive.", body: "“I’ve really enjoyed working with Rebecca. She’s professional, reliable, supportive, and always brings a positive attitude to the team. I’d happily recommend her to any organisation.”", mark: "01" },
-  { label: "Laverne R.", title: "An absolute driving force.", body: "“An absolute driving force in our group. Rebecca consistently brings innovative ideas to the table and ensures our deliverables are always top-tier.”", mark: "02" },
-  { label: "Musa N.", title: "Dependable and insightful.", body: "“Dependable, insightful, and incredibly hardworking. Becca is the kind of team member who elevates everyone else’s work just by being part of the process.”", mark: "03" },
-  { label: "Sinawo M.", title: "Dedication and clear communication.", body: "“I am always amazed by her dedication and clear communication. Rebecca has a unique talent for keeping the team focused and moving forward.”", mark: "04" },
-  { label: "Dev Nova · Web Development Team", title: "A phenomenal collaborator.", body: "“Rebecca is a phenomenal collaborator who consistently goes above and beyond to ensure our group succeeds. Any team would be lucky to have her on board.”", mark: "05" },
+  { label: "Princely M.", role: "CAPACITI programme colleague", title: "Professional, reliable, supportive.", body: "“I’ve really enjoyed working with Rebecca. She’s professional, reliable, supportive, and always brings a positive attitude to the team. I’d happily recommend her to any organisation.”", mark: "01", linkedin: "https://www.linkedin.com/", profileLabel: "LinkedIn profile placeholder for Princely M." },
+  { label: "Laverne R.", role: "CAPACITI programme colleague", title: "An absolute driving force.", body: "“An absolute driving force in our group. Rebecca consistently brings innovative ideas to the table and ensures our deliverables are always top-tier.”", mark: "02", linkedin: "https://www.linkedin.com/", profileLabel: "LinkedIn profile placeholder for Laverne R." },
+  { label: "Musa N.", role: "CAPACITI programme colleague", title: "Dependable and insightful.", body: "“Dependable, insightful, and incredibly hardworking. Becca is the kind of team member who elevates everyone else’s work just by being part of the process.”", mark: "03", linkedin: "https://www.linkedin.com/", profileLabel: "LinkedIn profile placeholder for Musa N." },
+  { label: "Sinawo M.", role: "CAPACITI programme colleague", title: "Dedication and clear communication.", body: "“I am always amazed by her dedication and clear communication. Rebecca has a unique talent for keeping the team focused and moving forward.”", mark: "04", linkedin: "https://www.linkedin.com/", profileLabel: "LinkedIn profile placeholder for Sinawo M." },
+  { label: "Dev Nova", role: "Web Development Team colleague", title: "A phenomenal collaborator.", body: "“Rebecca is a phenomenal collaborator who consistently goes above and beyond to ensure our group succeeds. Any team would be lucky to have her on board.”", mark: "05", linkedin: "https://www.linkedin.com/", profileLabel: "LinkedIn profile placeholder for Dev Nova." },
 ];
 
 const roadmap = [
@@ -185,6 +185,7 @@ export default function Home() {
   const [form, setForm] = useState(initialForm);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formState, setFormState] = useState<FormState>("idle");
+  const [resumeFeedback, setResumeFeedback] = useState(false);
   const [skillCategory, setSkillCategory] = useState<SkillCategory>("soft");
   const [aboutRef, aboutVisible] = useInView<HTMLElement>();
   const [journeyRef, journeyVisible] = useInView<HTMLElement>();
@@ -199,6 +200,8 @@ export default function Home() {
   const [activeRoadmap, setActiveRoadmap] = useState(0);
   const [growthRef, growthVisible] = useInView<HTMLElement>();
   const [roadmapRef, roadmapVisible] = useInView<HTMLElement>();
+  const growthCarouselRef = useRef<HTMLDivElement | null>(null);
+  const resumeFeedbackTimer = useRef<number | null>(null);
   const typewriterText = useTypewriter(TYPEWRITER_PHRASES);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const projectsCount = useCountUp(3, impactVisible);
@@ -245,6 +248,18 @@ export default function Home() {
     });
     return () => { cancelAnimationFrame(frame); lenis?.destroy(); };
   }, []);
+
+  const handleResumeDownload = () => {
+    setResumeFeedback(true);
+    if (resumeFeedbackTimer.current) window.clearTimeout(resumeFeedbackTimer.current);
+    resumeFeedbackTimer.current = window.setTimeout(() => setResumeFeedback(false), 1700);
+  };
+
+  const handleGrowthKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    growthCarouselRef.current?.scrollBy({ left: event.key === "ArrowRight" ? 360 : -360, behavior: "smooth" });
+  };
 
   const validateForm = () => {
     const errors: FormErrors = {};
@@ -294,7 +309,7 @@ export default function Home() {
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="hero-grain" />
         <div className="hero-ambient" aria-hidden="true"><span className="ambient-glyph glyph-code" style={{ transform: `translate3d(${parallax.x * 0.32}px, ${parallax.y * 0.32}px, 0)` }}>&lt;/&gt;</span><span className="ambient-glyph glyph-spark" style={{ transform: `translate3d(${parallax.x * -0.22}px, ${parallax.y * -0.22}px, 0)` }}>✦</span><span className="ambient-ring ring-one" style={{ transform: `translate3d(${parallax.x * 0.18}px, ${parallax.y * 0.18}px, 0)` }} /><span className="ambient-ring ring-two" style={{ transform: `translate3d(${parallax.x * -0.14}px, ${parallax.y * -0.14}px, 0)` }} /></div>
-        <div className="hero-copy"><p className="eyebrow hero-kicker"><span className="dot" /> Cape Town, South Africa <span>•</span> Available for junior roles</p><p className="hero-intro">Hello, I’m Rebecca —</p><h1 id="hero-title">Junior<br /><em>Web Developer</em></h1><p className="hero-typewriter" aria-live="polite"><span>{typewriterText}</span><i aria-hidden="true" /></p><p className="hero-summary">An emerging tech professional bringing creative, solution-based web development from a strong customer service foundation.</p><div className="hero-actions"><a className="button-primary" href="#work">View selected work <ArrowDownRight size={18} /></a><a className="button-outline hero-resume" href={CV_URL} target="_blank" rel="noreferrer" download>Download resume <Download size={16} /></a><a className="text-link hero-text-resume" href={TEXT_RESUME_URL} target="_blank" rel="noreferrer" download>Plain-text version <Download size={14} /></a><a className="text-link" href="#about">My story <ArrowRight size={15} /></a></div><div className="hero-credentials"><span>Currently building through</span><strong>CAPACITI</strong><span>12-month programme</span></div></div>
+        <div className="hero-copy"><p className="eyebrow hero-kicker"><span className="dot" /> Cape Town, South Africa <span>•</span> Available for junior roles</p><p className="hero-intro">Hello, I’m Rebecca —</p><h1 id="hero-title">Junior<br /><em>Web Developer</em></h1><p className="hero-typewriter" aria-live="polite"><span>{typewriterText}</span><i aria-hidden="true" /></p><p className="hero-summary">An emerging tech professional bringing creative, solution-based web development from a strong customer service foundation.</p><div className="hero-actions"><a className="button-primary" href="#work">View selected work <ArrowDownRight size={18} /></a><a className="button-outline hero-resume" href={CV_URL} target="_blank" rel="noreferrer" download onClick={handleResumeDownload}>Download resume <Download size={16} /></a><a className="text-link hero-text-resume" href={TEXT_RESUME_URL} target="_blank" rel="noreferrer" download onClick={handleResumeDownload}>Plain-text version <Download size={14} /></a>{resumeFeedback && <span className="resume-download-feedback" role="status" aria-live="polite"><b>✓</b><i /><i /><i /> Download ready</span>}<a className="text-link" href="#about">My story <ArrowRight size={15} /></a></div><div className="hero-credentials"><span>Currently building through</span><strong>CAPACITI</strong><span>12-month programme</span></div></div>
         <div className="hero-visual"><div className="hero-art" style={{ backgroundImage: `url(${HERO_ART_URL})` }} /><div className="portrait-wrap"><div className="portrait-frame"><img src={HEADSHOT_URL} alt="Rebecca Adams" /></div><p className="portrait-note">People-first<br />problem solver <Sparkles size={15} /></p></div><span className="hero-orbit orbit-one">CREATIVE TECH</span><span className="hero-orbit orbit-two">SYSTEMS &amp; STORIES</span></div>
         <a href="#about" className="hero-scroll"><span>Scroll to explore</span><i /></a>
       </section>
@@ -313,7 +328,7 @@ export default function Home() {
         <div className="pivot-pill"><BriefcaseBusiness size={16} /><span>Customer insight</span><i>→</i><span>Digital problem-solving</span></div>
       </section>
 
-      <section ref={growthRef} className={`growth-section section-wrap reveal ${growthVisible ? "is-visible" : ""}`} aria-labelledby="growth-title"><div className="section-index"><span>03</span><i /> Mentorship &amp; growth</div><div className="growth-heading"><div><p className="eyebrow">Room for real voices</p><h2 id="growth-title">What people<br /><em>say.</em></h2></div><p>A few verified reflections from colleagues who have worked alongside Rebecca — sharing the qualities they have seen in practice: reliability, initiative, clarity, and generous collaboration.</p></div><div className="growth-carousel" tabIndex={0} aria-label="Colleague reflections">{growthSlots.map((slot) => <article className="growth-card" key={slot.mark}><span className="growth-mark">{slot.mark}</span><p className="growth-label">{slot.label}</p><h3>{slot.title}</h3><p>{slot.body}</p><span className="growth-placeholder">Verified colleague quote</span></article>)}</div></section>
+      <section ref={growthRef} className={`growth-section section-wrap reveal ${growthVisible ? "is-visible" : ""}`} aria-labelledby="growth-title"><div className="section-index"><span>03</span><i /> Mentorship &amp; growth</div><div className="growth-heading"><div><p className="eyebrow">Room for real voices</p><h2 id="growth-title">What people<br /><em>say.</em></h2></div><p>A few verified reflections from colleagues who have worked alongside Rebecca — sharing the qualities they have seen in practice: reliability, initiative, clarity, and generous collaboration.</p></div><div className="growth-carousel" ref={growthCarouselRef} tabIndex={0} onKeyDown={handleGrowthKeyDown} aria-label="Colleague reflections. Use the left and right arrow keys to browse." aria-roledescription="carousel">{growthSlots.map((slot) => <article className="growth-card" key={slot.mark}><span className="growth-mark">{slot.mark}</span><div className="growth-card-meta"><div><p className="growth-label">{slot.label}</p><small>{slot.role}</small></div><a href={slot.linkedin} target="_blank" rel="noreferrer" className="growth-linkedin" aria-label={slot.profileLabel} title="LinkedIn profile placeholder"><Linkedin size={15} /></a></div><h3>{slot.title}</h3><p>{slot.body}</p><span className="growth-placeholder">Verified colleague quote</span></article>)}</div></section>
 
       <section ref={roadmapRef} className={`roadmap-section section-wrap reveal ${roadmapVisible ? "is-visible" : ""}`} aria-labelledby="roadmap-title"><div className="section-index"><span>04</span><i /> Current journey</div><div className="roadmap-heading"><div><p className="eyebrow">CAPACITI · 12-month programme</p><h2 id="roadmap-title">Learning in<br /><em>layers.</em></h2></div><p>Tap a phase to see the specific capabilities Rebecca is building next, from dependable interfaces to integrated AI and full-stack thinking.</p></div><div className="roadmap-track" role="tablist" aria-label="CAPACITI learning phases">{roadmap.map((item, index) => { const Icon = item.icon; return <button key={item.phase} className={`roadmap-node ${activeRoadmap === index ? "is-active" : ""}`} role="tab" aria-selected={activeRoadmap === index} onClick={() => setActiveRoadmap(index)}><span className="roadmap-dot"><Icon size={16} /></span><span><b>{item.phase}</b><strong>{item.title}</strong></span></button>; })}</div><article className="roadmap-detail" role="tabpanel"><span>{roadmap[activeRoadmap].phase} · active focus</span><h3>{roadmap[activeRoadmap].title}</h3><p>{roadmap[activeRoadmap].detail}</p><ChevronRight size={18} /></article></section>
 
