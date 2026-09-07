@@ -200,7 +200,9 @@ export default function Home() {
   const [activeRoadmap, setActiveRoadmap] = useState(0);
   const [growthRef, growthVisible] = useInView<HTMLElement>();
   const [roadmapRef, roadmapVisible] = useInView<HTMLElement>();
+  const [growthPaused, setGrowthPaused] = useState(false);
   const growthCarouselRef = useRef<HTMLDivElement | null>(null);
+  const growthPauseTimer = useRef<number | null>(null);
   const resumeFeedbackTimer = useRef<number | null>(null);
   const typewriterText = useTypewriter(TYPEWRITER_PHRASES);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
@@ -255,10 +257,30 @@ export default function Home() {
     resumeFeedbackTimer.current = window.setTimeout(() => setResumeFeedback(false), 1700);
   };
 
+  useEffect(() => {
+    if (growthPaused) return;
+    const autoPlay = window.setInterval(() => {
+      growthCarouselRef.current?.scrollBy({ left: 360, behavior: "smooth" });
+    }, 7200);
+    return () => window.clearInterval(autoPlay);
+  }, [growthPaused]);
+
+  const pauseGrowth = () => {
+    if (growthPauseTimer.current) window.clearTimeout(growthPauseTimer.current);
+    setGrowthPaused(true);
+  };
+
+  const resumeGrowth = () => {
+    if (growthPauseTimer.current) window.clearTimeout(growthPauseTimer.current);
+    setGrowthPaused(false);
+  };
+
   const handleGrowthKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
     event.preventDefault();
+    pauseGrowth();
     growthCarouselRef.current?.scrollBy({ left: event.key === "ArrowRight" ? 360 : -360, behavior: "smooth" });
+    growthPauseTimer.current = window.setTimeout(resumeGrowth, 8000);
   };
 
   const validateForm = () => {
@@ -328,7 +350,7 @@ export default function Home() {
         <div className="pivot-pill"><BriefcaseBusiness size={16} /><span>Customer insight</span><i>→</i><span>Digital problem-solving</span></div>
       </section>
 
-      <section ref={growthRef} className={`growth-section section-wrap reveal ${growthVisible ? "is-visible" : ""}`} aria-labelledby="growth-title"><div className="section-index"><span>03</span><i /> Mentorship &amp; growth</div><div className="growth-heading"><div><p className="eyebrow">Room for real voices</p><h2 id="growth-title">What people<br /><em>say.</em></h2></div><p>A few verified reflections from colleagues who have worked alongside Rebecca — sharing the qualities they have seen in practice: reliability, initiative, clarity, and generous collaboration.</p></div><div className="growth-carousel" ref={growthCarouselRef} tabIndex={0} onKeyDown={handleGrowthKeyDown} aria-label="Colleague reflections. Use the left and right arrow keys to browse." aria-roledescription="carousel">{growthSlots.map((slot) => <article className="growth-card" key={slot.mark}><span className="growth-mark">{slot.mark}</span><div className="growth-card-meta"><div><p className="growth-label">{slot.label}</p><small>{slot.role}</small></div>{slot.linkedin ? <a href={slot.linkedin} target="_blank" rel="noreferrer" className="growth-linkedin" aria-label={slot.profileLabel} title="Open LinkedIn profile"><Linkedin size={15} /></a> : <span className="growth-linkedin is-unavailable" role="img" aria-label={slot.profileLabel} title={slot.profileLabel}><Linkedin size={15} /></span>}</div><h3>{slot.title}</h3><p>{slot.body}</p><span className="growth-placeholder">Verified colleague quote</span></article>)}</div></section>
+      <section ref={growthRef} className={`growth-section section-wrap reveal ${growthVisible ? "is-visible" : ""}`} aria-labelledby="growth-title"><div className="section-index"><span>03</span><i /> Mentorship &amp; growth</div><div className="growth-heading"><div><p className="eyebrow">Room for real voices</p><h2 id="growth-title">What people<br /><em>say.</em></h2></div><p>A few verified reflections from colleagues who have worked alongside Rebecca — sharing the qualities they have seen in practice: reliability, initiative, clarity, and generous collaboration.</p></div><div className={`growth-carousel ${growthPaused ? "is-paused" : "is-playing"}`} ref={growthCarouselRef} tabIndex={0} onKeyDown={handleGrowthKeyDown} onMouseEnter={pauseGrowth} onMouseLeave={resumeGrowth} onFocus={pauseGrowth} onBlur={resumeGrowth} aria-label="Colleague reflections. Auto-playing every 7 seconds; use the left and right arrow keys to browse." aria-roledescription="carousel">{growthSlots.map((slot) => <article className="growth-card" key={slot.mark}><span className="growth-mark">{slot.mark}</span><div className="growth-card-meta"><div><p className="growth-label">{slot.label}</p><small>{slot.role}</small></div>{slot.linkedin ? <a href={slot.linkedin} target="_blank" rel="noreferrer" className="growth-linkedin" aria-label={slot.profileLabel} title="Open LinkedIn profile"><Linkedin size={15} /></a> : <span className="growth-linkedin is-unavailable" role="img" aria-label={slot.profileLabel} title={slot.profileLabel}><Linkedin size={15} /></span>}</div><h3>{slot.title}</h3><p>{slot.body}</p><span className="growth-placeholder">Verified colleague quote</span></article>)}</div></section>
 
       <section ref={roadmapRef} className={`roadmap-section section-wrap reveal ${roadmapVisible ? "is-visible" : ""}`} aria-labelledby="roadmap-title"><div className="section-index"><span>04</span><i /> Current journey</div><div className="roadmap-heading"><div><p className="eyebrow">CAPACITI · 12-month programme</p><h2 id="roadmap-title">Learning in<br /><em>layers.</em></h2></div><p>Tap a phase to see the specific capabilities Rebecca is building next, from dependable interfaces to integrated AI and full-stack thinking.</p></div><div className="roadmap-track" role="tablist" aria-label="CAPACITI learning phases">{roadmap.map((item, index) => { const Icon = item.icon; return <button key={item.phase} className={`roadmap-node ${activeRoadmap === index ? "is-active" : ""}`} role="tab" aria-selected={activeRoadmap === index} onClick={() => setActiveRoadmap(index)}><span className="roadmap-dot"><Icon size={16} /></span><span><b>{item.phase}</b><strong>{item.title}</strong></span></button>; })}</div><article className="roadmap-detail" role="tabpanel"><span>{roadmap[activeRoadmap].phase} · active focus</span><h3>{roadmap[activeRoadmap].title}</h3><p>{roadmap[activeRoadmap].detail}</p><ChevronRight size={18} /></article></section>
 

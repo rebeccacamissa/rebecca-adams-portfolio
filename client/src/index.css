@@ -176,3 +176,12 @@ body, body button, body a, body input, body textarea { cursor:var(--pink-cursor)
 
 /* Social Proof attribution correction: distinguish real profile links from a truthful no-profile state. */
 .growth-linkedin.is-unavailable { color:color-mix(in srgb,var(--boho) 45%,transparent); border-style:dashed; cursor:default; }
+
+
+/* Editorial motion refinement: slow testimonial movement, clear interaction pauses, and a restrained active-learning signal. */
+.growth-carousel.is-playing { scroll-behavior:smooth; }
+.growth-carousel.is-paused { scroll-behavior:auto; }
+.growth-linkedin:hover, .growth-linkedin:focus-visible { color:var(--camel); background:var(--boho); border-color:var(--boho); box-shadow:0 0 0 4px color-mix(in srgb,var(--boho) 12%,transparent), 0 6px 18px color-mix(in srgb,var(--boho) 24%,transparent); }
+.roadmap-node.is-active .roadmap-dot { animation:roadmap-active-pulse 2.8s ease-in-out infinite; box-shadow:0 0 0 0 color-mix(in srgb,var(--boho) 30%,transparent); }
+@keyframes roadmap-active-pulse { 0%,100% { transform:scale(1); box-shadow:0 0 0 0 color-mix(in srgb,var(--boho) 28%,transparent); } 50% { transform:scale(1.08); box-shadow:0 0 0 8px color-mix(in srgb,var(--boho) 0%,transparent); } }
+@media (prefers-reduced-motion:reduce) { .roadmap-node.is-active .roadmap-dot { animation:none; } .growth-carousel.is-playing { scroll-behavior:auto; } }

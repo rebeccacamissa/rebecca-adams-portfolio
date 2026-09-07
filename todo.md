@@ -187,3 +187,11 @@ The mentorship carousel must not present invented testimonials, ratings, or endo
 - [x] Mark Laverne as having no LinkedIn profile instead of linking to a generic destination.
 - [x] Attribute the Dev Nova quote to the Web Development Team group rather than an individual colleague.
 - [x] Run build and responsive visual checks, then save the correction checkpoint.
+
+
+## Testimonial auto-play and roadmap motion pass
+
+- [x] Add slow testimonial auto-play that pauses while a user hovers the carousel or uses keyboard navigation.
+- [x] Add a subtle Boho-brown glow to LinkedIn icons on hover and focus.
+- [x] Add a restrained pulse to the active CAPACITI roadmap phase with reduced-motion support.
+- [x] Run typecheck/build and responsive visual checks before saving a checkpoint.
