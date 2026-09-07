@@ -93,3 +93,11 @@ The refreshed desktop and mobile previews show Adam as a small, fixed bottom-rig
 - [x] Add `5173-i5677lyqm6fzf3qljcixw-3a5536d8.us4.manus.computer` to `server.allowedHosts`.
 - [x] Run the production build and save the repair checkpoint.
 
+
+## Pink cursor and detailed chatbot update
+
+- [x] Inspect the current paw cursor CSS and Adam response architecture.
+- [x] Replace the paw asset cursor with a standard pink arrow cursor.
+- [x] Expand Adam’s response guidance, content, and generation parameters.
+- [x] Run type, production-build, and interaction checks, then save a checkpoint.
+
