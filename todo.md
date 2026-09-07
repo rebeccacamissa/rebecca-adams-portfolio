@@ -162,3 +162,11 @@ The mentorship carousel must not present invented testimonials, ratings, or endo
 - [x] Add inline validation messages for the contact form and keep invalid submissions from reaching Formspree.
 - [x] Add a clear animated success state after a valid contact submission succeeds.
 - [x] Run typecheck/build and responsive visual checks before saving a checkpoint.
+
+
+## Cursor, colleague quotes, and text resume pass
+
+- [x] Reduce the custom pink cursor another small step while preserving its center hotspot.
+- [x] Replace Social Proof placeholder cards with the five colleague quotes supplied by Rebecca.
+- [x] Add a deployment-safe plain-text resume asset and a secondary Hero download action.
+- [x] Run typecheck/build and responsive visual checks before saving a checkpoint.
