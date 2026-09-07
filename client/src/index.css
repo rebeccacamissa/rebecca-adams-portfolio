@@ -72,3 +72,55 @@ body { overscroll-behavior-y: none; }
 @keyframes ambient-drift { from { transform: translate3d(-8px, 0, 0) rotate(0); } to { transform: translate3d(18px, -26px, 0) rotate(12deg); } } @keyframes node-pulse { 0%,100% { transform: scale(.7); opacity: .18; } 50% { transform: scale(1.5); opacity: .62; } }
 @media (max-width: 680px) { .impact-row { grid-template-columns: repeat(3, 1fr); gap: 0; }.impact-item { padding: .65rem .45rem; min-height: 76px; }.impact-item strong { font-size: 2rem; }.impact-item span { font-size: .44rem; line-height: 1.35; }.impact-note { grid-column: 1 / -1; padding: 1rem .45rem .2rem; }.skill-matrix { grid-template-columns: 1fr; gap: 1rem; }.github-dashboard { grid-template-columns: 1fr; gap: 2.6rem; }.github-meta { grid-column: 1; gap: 1rem; flex-direction: column; }.github-grid { gap: 3px; }.ambient-field { opacity: .65; } }
 @media (prefers-reduced-motion: reduce) { .reveal, .reveal-child { opacity: 1; transform: none; transition: none; }.github-cell { opacity: 1; transform: none; transition: none; }.skill-meter > i em.is-filled { transition: none; }.timeline-track::before { transform: translateX(-50%) scaleY(1); transition: none; } }
+
+
+/* Camel Editorial Atelier additions: typewriter role line, low-contrast cursor-parallax glyphs, verified-growth placeholders, and CAPACITI learning roadmap. */
+.hero { isolation:isolate; }
+.hero-ambient, .contact-ambient { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.hero-ambient > *, .contact-ambient > * { will-change:transform; transition:transform .25s cubic-bezier(.23,1,.32,1); }
+.hero-copy, .hero-visual, .hero-scroll { z-index:2; }
+.ambient-glyph { position:absolute; font-family:"DM Serif Display",Georgia,serif; font-style:italic; color:var(--boho); opacity:.16; user-select:none; animation:ambient-float 8s ease-in-out infinite; }
+.glyph-code { left:9%; top:24%; font-family:"Manrope",Arial,sans-serif; font-size:1.35rem; letter-spacing:-.16em; animation-delay:-1.2s; }
+.glyph-spark { right:11%; top:18%; font-size:2rem; animation-duration:10s; animation-delay:-4s; }
+.ambient-ring { position:absolute; border:1px solid var(--boho); border-radius:50%; opacity:.12; animation:ambient-float 11s ease-in-out infinite reverse; }
+.ring-one { right:5%; bottom:13%; width:7rem; height:7rem; }
+.ring-two { left:38%; top:14%; width:2.4rem; height:2.4rem; animation-duration:13s; animation-delay:-3s; }
+.hero-typewriter { min-height:1.55em; margin:1.35rem 0 .2rem; display:flex; align-items:center; gap:.35rem; color:var(--boho); font-family:"DM Serif Display",Georgia,serif; font-size:clamp(1.25rem,2.05vw,2rem); font-style:italic; letter-spacing:-.035em; }
+.hero-typewriter i { width:2px; height:1.15em; display:inline-block; background:var(--boho); animation:typewriter-caret .8s steps(1,end) infinite; }
+.growth-section, .roadmap-section { position:relative; padding-top:clamp(4.8rem,9vw,9rem); padding-bottom:clamp(4.8rem,9vw,9rem); overflow:hidden; }
+.growth-section { background:color-mix(in srgb,var(--camel-light) 36%,var(--background)); }
+.growth-heading, .roadmap-heading { display:grid; grid-template-columns:1fr minmax(260px,.46fr); gap:4rem; align-items:end; }
+.growth-heading h2, .roadmap-heading h2 { font-size:clamp(3rem,5.3vw,6rem); line-height:.94; margin:0; font-family:"DM Serif Display",Georgia,serif; font-weight:400; letter-spacing:-.065em; }
+.growth-heading h2 em, .roadmap-heading h2 em { color:var(--boho); }
+.growth-heading > p, .roadmap-heading > p { margin:0; font-size:.92rem; line-height:1.85; color:color-mix(in srgb,var(--foreground) 76%,transparent); }
+.growth-carousel { display:flex; gap:1rem; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:var(--camel) transparent; margin-top:clamp(3rem,6vw,5.5rem); padding:.35rem .2rem 1.2rem; overscroll-behavior-x:contain; }
+.growth-card { flex:0 0 min(31rem,82vw); min-height:250px; scroll-snap-align:start; position:relative; padding:1.5rem 1.6rem 1.6rem; border:1px solid color-mix(in srgb,var(--boho) 28%,transparent); background:color-mix(in srgb,var(--background) 74%,transparent); box-shadow:8px 9px 0 color-mix(in srgb,var(--camel) 34%,transparent); transition:transform .25s cubic-bezier(.23,1,.32,1), box-shadow .25s ease, background .25s ease; }
+.growth-card:hover { transform:translateY(-6px); background:color-mix(in srgb,var(--background) 92%,transparent); box-shadow:12px 13px 0 color-mix(in srgb,var(--camel) 48%,transparent); }
+.growth-mark { position:absolute; top:1.1rem; right:1.15rem; color:var(--boho); font-family:"DM Serif Display",Georgia,serif; font-size:1.2rem; }
+.growth-label, .growth-placeholder, .roadmap-detail > span { text-transform:uppercase; letter-spacing:.14em; font-size:.55rem; font-weight:800; color:var(--boho); }
+.growth-label { margin:0 0 2.8rem; }
+.growth-card h3 { margin:0 0 .8rem; font-family:"DM Serif Display",Georgia,serif; font-size:clamp(1.65rem,2.6vw,2.3rem); font-weight:400; letter-spacing:-.045em; line-height:1; }
+.growth-card > p:not(.growth-label) { max-width:26rem; margin:0; color:color-mix(in srgb,var(--foreground) 75%,transparent); font-size:.82rem; line-height:1.8; }
+.growth-placeholder { display:inline-block; margin-top:1.8rem; padding:.4rem .55rem; border:1px dashed color-mix(in srgb,var(--boho) 50%,transparent); }
+.roadmap-track { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:clamp(3rem,6vw,5.5rem); }
+.roadmap-track::before { content:""; position:absolute; top:1.4rem; left:10%; right:10%; height:1px; background:linear-gradient(90deg,var(--camel),var(--boho),var(--camel)); opacity:.7; }
+.roadmap-node { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:.75rem; min-width:0; padding:0 .8rem; text-align:center; color:var(--foreground); }
+.roadmap-dot { width:2.8rem; height:2.8rem; display:grid; place-items:center; border:1px solid var(--boho); border-radius:50%; background:var(--background); color:var(--boho); transition:background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.roadmap-node:hover .roadmap-dot, .roadmap-node.is-active .roadmap-dot { background:var(--roast); color:var(--camel); transform:translateY(-3px); box-shadow:0 0 0 6px color-mix(in srgb,var(--camel) 38%,transparent); }
+.roadmap-node b, .roadmap-node strong { display:block; }
+.roadmap-node b { color:var(--boho); text-transform:uppercase; letter-spacing:.14em; font-size:.54rem; }
+.roadmap-node strong { margin-top:.35rem; font-family:"DM Serif Display",Georgia,serif; font-size:1.2rem; font-weight:400; line-height:1.05; }
+.roadmap-detail { position:relative; max-width:46rem; margin:3rem auto 0; padding:1.35rem 1.5rem 1.45rem; border-left:3px solid var(--camel); background:color-mix(in srgb,var(--camel-light) 35%,var(--background)); }
+.roadmap-detail h3 { margin:.45rem 0 .5rem; font-family:"DM Serif Display",Georgia,serif; font-size:clamp(1.7rem,3vw,2.5rem); font-weight:400; letter-spacing:-.04em; }
+.roadmap-detail p { max-width:39rem; margin:0; font-size:.82rem; line-height:1.8; color:color-mix(in srgb,var(--foreground) 76%,transparent); }
+.roadmap-detail > svg { position:absolute; right:1.2rem; top:50%; color:var(--boho); }
+.contact-section { position:relative; overflow:hidden; }
+.contact-section > *:not(.contact-ambient) { position:relative; z-index:1; }
+.contact-ambient .contact-code { left:7%; top:12%; color:var(--roast); opacity:.15; }
+.contact-ambient .contact-spark { right:9%; bottom:19%; color:var(--roast); opacity:.16; }
+.contact-ring { right:5%; top:15%; width:11rem; height:11rem; border-color:var(--roast); opacity:.11; }
+@keyframes ambient-float { 0%,100% { translate:0 0; } 50% { translate:0 -13px; } }
+@keyframes typewriter-caret { 0%,45% { opacity:1; } 46%,100% { opacity:0; } }
+@media (max-width:900px) { .growth-heading, .roadmap-heading { gap:2.5rem; } }
+@media (max-width:680px) { .hero-typewriter { font-size:1.3rem; margin-top:1rem; }.hero-ambient .glyph-code { left:3%; top:18%; }.hero-ambient .glyph-spark { right:3%; top:13%; }.growth-heading, .roadmap-heading { grid-template-columns:1fr; gap:1.4rem; }.growth-carousel { margin-top:2.8rem; }.growth-card { min-height:235px; padding:1.25rem 1.2rem; }.roadmap-track { grid-template-columns:1fr; gap:1rem; }.roadmap-track::before { top:1.4rem; bottom:1.4rem; left:1.4rem; right:auto; width:1px; height:auto; background:linear-gradient(180deg,var(--camel),var(--boho),var(--camel)); }.roadmap-node { flex-direction:row; justify-content:flex-start; gap:.8rem; padding:0; text-align:left; }.roadmap-node > span:last-child { flex:1; }.roadmap-node strong { font-size:1.1rem; }.roadmap-detail { margin-top:2.2rem; padding:1.2rem 1.1rem; }.contact-ambient .contact-ring { right:-4rem; top:9%; width:8rem; height:8rem; } }
+@media (prefers-reduced-motion: reduce) { .ambient-glyph, .ambient-ring, .hero-typewriter i { animation:none; }.hero-ambient > *, .contact-ambient > * { transition:none; } }

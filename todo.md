@@ -140,3 +140,16 @@ Desktop and mobile full-page previews preserve the editorial hierarchy, responsi
 - [x] Submit the authorized live Formspree test and verify the endpoint response.
 - [x] Rerun affected QA/build checks and save the final checkpoint.
 
+
+
+## Typewriter, ambient motion, and growth sections
+
+- [x] Replace the static hero subtitle with an infinite Boho-brown typewriter cycle for the four approved role phrases.
+- [x] Add low-opacity floating SVG-inspired elements with cursor-responsive parallax in the Hero and Contact sections.
+- [x] Add a swipeable mentorship-and-growth carousel using clearly labelled placeholder role cards without fabricated testimonials.
+- [x] Add a clickable horizontal CAPACITI roadmap with technology details for each phase.
+- [x] Verify the existing reveals, pink paw cursor, docked Adam, responsive layout, typecheck, and production build before saving a checkpoint.
+
+## Content integrity note
+
+The mentorship carousel must not present invented testimonials, ratings, or endorsements as real user-generated feedback. Until supplied, cards will be labelled as placeholder slots or growth prompts.

@@ -4,6 +4,8 @@ import {
   ArrowDownRight,
   ArrowRight,
   Award,
+  BrainCircuit,
+  ChevronRight,
   BriefcaseBusiness,
   Code2,
   Coffee,
@@ -29,6 +31,19 @@ const HEADSHOT_URL = "/manus-storage/rebecca-adams-headshot_2abac0ae.jpeg";
 const HERO_ART_URL = "/manus-storage/rebecca-editorial-hero_5ee1710e.jpg";
 const LOGO_URL = "/manus-storage/rebecca-ra-emblem_d4e7c3e6.png";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xnpqaoby";
+const TYPEWRITER_PHRASES = ["Junior Web Developer", "AI Solutions Integrator", "Creative Problem Solver", "CAPACITI Tech Fellow"];
+
+const growthSlots = [
+  { label: "CAPACITI mentor", title: "Verified reflection slot", body: "A dedicated place for a real mentor reflection about Rebecca’s learning rhythm, collaboration, and growth through the programme.", mark: "01" },
+  { label: "Former manager", title: "Workplace perspective slot", body: "Reserved for a first-hand reference about Rebecca’s reliability, customer communication, and ability to stay composed while priorities move.", mark: "02" },
+  { label: "Peer collaborator", title: "Project collaboration slot", body: "A future peer note can capture how Rebecca contributes to shared problem-solving, feedback loops, and thoughtful digital work.", mark: "03" },
+];
+
+const roadmap = [
+  { phase: "Phase 1", title: "Web fundamentals", detail: "Responsive layout, semantic HTML, CSS systems, JavaScript foundations, accessibility, Git, and the habits that make an interface dependable.", icon: Code2 },
+  { phase: "Phase 2", title: "AI & prompt engineering", detail: "Prompt structure, conversational UX, data-informed workflows, responsible AI thinking, and practical ways to turn ambiguous needs into useful tools.", icon: BrainCircuit },
+  { phase: "Phase 3", title: "Full-stack architecture", detail: "Component architecture, API thinking, persistence, deployment patterns, and the systems mindset needed to connect polished interfaces to real outcomes.", icon: ShieldCheck },
+];
 
 const skills = [
   { name: "Responsive UI", type: "Web" },
@@ -112,6 +127,34 @@ function useInView<T extends Element>(threshold = 0.18) {
   return [ref, visible] as const;
 }
 
+function useTypewriter(phrases: string[]) {
+  const [text, setText] = useState(phrases[0] ?? "");
+  useEffect(() => {
+    let phraseIndex = 0;
+    let characterIndex = 0;
+    let deleting = false;
+    let timer: number;
+    const tick = () => {
+      const phrase = phrases[phraseIndex] ?? "";
+      characterIndex += deleting ? -1 : 1;
+      setText(phrase.slice(0, characterIndex));
+      if (!deleting && characterIndex >= phrase.length) {
+        deleting = true;
+        timer = window.setTimeout(tick, 1550);
+        return;
+      }
+      if (deleting && characterIndex <= 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }
+      timer = window.setTimeout(tick, deleting ? 46 : 82);
+    };
+    timer = window.setTimeout(tick, 900);
+    return () => window.clearTimeout(timer);
+  }, [phrases]);
+  return text;
+}
+
 function useCountUp(target: number, enabled: boolean, duration = 900) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -146,6 +189,11 @@ export default function Home() {
   const [githubStatus, setGithubStatus] = useState<GitHubStatus>("loading");
   const [githubProfile, setGithubProfile] = useState<GitHubProfile | null>(null);
   const [githubActivity, setGithubActivity] = useState<GitHubActivity[]>([]);
+  const [activeRoadmap, setActiveRoadmap] = useState(0);
+  const [growthRef, growthVisible] = useInView<HTMLElement>();
+  const [roadmapRef, roadmapVisible] = useInView<HTMLElement>();
+  const typewriterText = useTypewriter(TYPEWRITER_PHRASES);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const projectsCount = useCountUp(3, impactVisible);
   const certificatesCount = useCountUp(7, impactVisible);
   const skillsCount = useCountUp(15, impactVisible);
@@ -164,6 +212,19 @@ export default function Home() {
         setGithubStatus("error");
       });
     return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const handlePointerMove = (event: PointerEvent) => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        setParallax({ x: (event.clientX / window.innerWidth - 0.5) * 18, y: (event.clientY / window.innerHeight - 0.5) * 12 });
+        frame = 0;
+      });
+    };
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => { window.removeEventListener("pointermove", handlePointerMove); if (frame) window.cancelAnimationFrame(frame); };
   }, []);
 
   useEffect(() => {
@@ -205,7 +266,8 @@ export default function Home() {
 
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="hero-grain" />
-        <div className="hero-copy"><p className="eyebrow hero-kicker"><span className="dot" /> Cape Town, South Africa <span>•</span> Available for junior roles</p><p className="hero-intro">Hello, I’m Rebecca —</p><h1 id="hero-title">Junior<br /><em>Web Developer</em></h1><p className="hero-summary">An emerging tech professional bringing creative, solution-based web development from a strong customer service foundation.</p><div className="hero-actions"><a className="button-primary" href="#work">View selected work <ArrowDownRight size={18} /></a><a className="text-link" href="#about">My story <ArrowRight size={15} /></a></div><div className="hero-credentials"><span>Currently building through</span><strong>CAPACITI</strong><span>12-month programme</span></div></div>
+        <div className="hero-ambient" aria-hidden="true"><span className="ambient-glyph glyph-code" style={{ transform: `translate3d(${parallax.x * 0.32}px, ${parallax.y * 0.32}px, 0)` }}>&lt;/&gt;</span><span className="ambient-glyph glyph-spark" style={{ transform: `translate3d(${parallax.x * -0.22}px, ${parallax.y * -0.22}px, 0)` }}>✦</span><span className="ambient-ring ring-one" style={{ transform: `translate3d(${parallax.x * 0.18}px, ${parallax.y * 0.18}px, 0)` }} /><span className="ambient-ring ring-two" style={{ transform: `translate3d(${parallax.x * -0.14}px, ${parallax.y * -0.14}px, 0)` }} /></div>
+        <div className="hero-copy"><p className="eyebrow hero-kicker"><span className="dot" /> Cape Town, South Africa <span>•</span> Available for junior roles</p><p className="hero-intro">Hello, I’m Rebecca —</p><h1 id="hero-title">Junior<br /><em>Web Developer</em></h1><p className="hero-typewriter" aria-live="polite"><span>{typewriterText}</span><i aria-hidden="true" /></p><p className="hero-summary">An emerging tech professional bringing creative, solution-based web development from a strong customer service foundation.</p><div className="hero-actions"><a className="button-primary" href="#work">View selected work <ArrowDownRight size={18} /></a><a className="text-link" href="#about">My story <ArrowRight size={15} /></a></div><div className="hero-credentials"><span>Currently building through</span><strong>CAPACITI</strong><span>12-month programme</span></div></div>
         <div className="hero-visual"><div className="hero-art" style={{ backgroundImage: `url(${HERO_ART_URL})` }} /><div className="portrait-wrap"><div className="portrait-frame"><img src={HEADSHOT_URL} alt="Rebecca Adams" /></div><p className="portrait-note">People-first<br />problem solver <Sparkles size={15} /></p></div><span className="hero-orbit orbit-one">CREATIVE TECH</span><span className="hero-orbit orbit-two">SYSTEMS &amp; STORIES</span></div>
         <a href="#about" className="hero-scroll"><span>Scroll to explore</span><i /></a>
       </section>
@@ -224,6 +286,10 @@ export default function Home() {
         <div className="pivot-pill"><BriefcaseBusiness size={16} /><span>Customer insight</span><i>→</i><span>Digital problem-solving</span></div>
       </section>
 
+      <section ref={growthRef} className={`growth-section section-wrap reveal ${growthVisible ? "is-visible" : ""}`} aria-labelledby="growth-title"><div className="section-index"><span>03</span><i /> Mentorship &amp; growth</div><div className="growth-heading"><div><p className="eyebrow">Room for real voices</p><h2 id="growth-title">What people<br /><em>will say.</em></h2></div><p>This space is designed for verified reflections from the people Rebecca learns and works with. The cards below are clearly marked placeholders until real permissions and wording are supplied.</p></div><div className="growth-carousel" tabIndex={0} aria-label="Mentorship and growth placeholder cards">{growthSlots.map((slot) => <article className="growth-card" key={slot.mark}><span className="growth-mark">{slot.mark}</span><p className="growth-label">{slot.label}</p><h3>{slot.title}</h3><p>{slot.body}</p><span className="growth-placeholder">Awaiting verified note</span></article>)}</div></section>
+
+      <section ref={roadmapRef} className={`roadmap-section section-wrap reveal ${roadmapVisible ? "is-visible" : ""}`} aria-labelledby="roadmap-title"><div className="section-index"><span>04</span><i /> Current journey</div><div className="roadmap-heading"><div><p className="eyebrow">CAPACITI · 12-month programme</p><h2 id="roadmap-title">Learning in<br /><em>layers.</em></h2></div><p>Tap a phase to see the specific capabilities Rebecca is building next, from dependable interfaces to integrated AI and full-stack thinking.</p></div><div className="roadmap-track" role="tablist" aria-label="CAPACITI learning phases">{roadmap.map((item, index) => { const Icon = item.icon; return <button key={item.phase} className={`roadmap-node ${activeRoadmap === index ? "is-active" : ""}`} role="tab" aria-selected={activeRoadmap === index} onClick={() => setActiveRoadmap(index)}><span className="roadmap-dot"><Icon size={16} /></span><span><b>{item.phase}</b><strong>{item.title}</strong></span></button>; })}</div><article className="roadmap-detail" role="tabpanel"><span>{roadmap[activeRoadmap].phase} · active focus</span><h3>{roadmap[activeRoadmap].title}</h3><p>{roadmap[activeRoadmap].detail}</p><ChevronRight size={18} /></article></section>
+
       <section ref={skillsRef} className={`skills-section section-wrap reveal ${skillsVisible ? "is-visible" : ""}`} aria-labelledby="skills-title"><div className="section-index"><span>03</span><i /> Toolkit</div><div className="skills-top"><div><p className="eyebrow">What I bring to the table</p><h2 id="skills-title">Skill, <em>with</em><br /> context.</h2></div><p>My toolkit is both technical and human. I’m attentive to the details inside a system — and to the people moving through it.</p></div><div className="skill-switcher" role="tablist" aria-label="Skill categories"><button className={skillCategory === "soft" ? "is-active" : ""} onClick={() => setSkillCategory("soft")} role="tab" aria-selected={skillCategory === "soft"}>Human &amp; workplace</button><button className={skillCategory === "technical" ? "is-active" : ""} onClick={() => setSkillCategory("technical")} role="tab" aria-selected={skillCategory === "technical"}>Tools &amp; technical</button></div><div className="skill-matrix" role="list" aria-label={`${skillCategory} skills`}>{skillMatrix[skillCategory].map((skill, index) => <div className="skill-meter" role="listitem" key={skill.name} style={{ "--skill-value": `${skill.value}%`, "--stagger": `${index * 70}ms` } as CSSProperties}><div><span>{skill.name}</span><b>{skill.value}%</b></div><i><em className={skillsVisible ? "is-filled" : ""} /></i></div>)}</div><div className="skill-cloud skill-cloud-compact" role="list" aria-label="Additional skills">{skills.filter(skill => !skillMatrix[skillCategory].some(item => item.name.toLowerCase() === skill.name.toLowerCase())).slice(0, 6).map((skill, index) => <span key={skill.name} role="listitem" className={`skill skill-${skill.type.toLowerCase()} skill-${(index % 5) + 1}`}><small>{skill.type}</small>{skill.name}</span>)}</div></section>
 
       <section ref={workRef} className={`work-section reveal ${workVisible ? "is-visible" : ""}`} id="work" aria-labelledby="work-title"><div className="work-header section-wrap"><div className="section-index light-index"><span>04</span><i /> Selected work</div><div className="work-heading"><div><p className="eyebrow">Small details. Bigger possibility.</p><h2 id="work-title">Ideas, made<br /><em>useful.</em></h2></div><p>Three concept-to-interface studies that bring together product empathy, practical constraints, and clear digital journeys.</p></div></div><div className="project-rail">{projects.map((project) => <article key={project.id} className="project-card tactile-card reveal-child" style={{ "--stagger": `${Number(project.id) * 100}ms` } as CSSProperties}><div className="project-card-top"><span className="project-number">{project.id}</span><span className="project-category">{project.category}</span></div><h3>{project.title}</h3><div className="project-dossier"><div><span>Problem</span><p>{project.problem}</p></div><div><span>Solution</span><p>{project.solution}</p></div><div className="result"><span>Result</span><p>{project.result}</p></div><div className="project-footer"><div>{project.tags.map(tag => <b key={tag}>{tag}</b>)}</div><div className="project-links"><a href={project.repo} target="_blank" rel="noreferrer">GitHub <Github size={14} /></a>{project.live && <a href={project.live} target="_blank" rel="noreferrer">Live <ExternalLink size={14} /></a>}</div></div></div></article>)}</div></section>
@@ -232,7 +298,7 @@ export default function Home() {
 
       <div ref={githubRef} className={`github-dashboard section-wrap reveal ${githubVisible ? "is-visible" : ""}`} aria-label="GitHub activity"><div className="github-copy"><p className="eyebrow">Live GitHub activity</p><h2>Work in <em>public.</em></h2><p>Adam and this portfolio read Rebecca’s public GitHub feed directly, so visitors can see what she has been shipping most recently.</p><div className="github-statline"><strong>{githubProfile?.public_repos ?? "—"}</strong><span>public repositories</span><strong>{githubActivity.length || "—"}</strong><span>recent commits found</span></div><a href={`https://github.com/${GITHUB_LOGIN}`} target="_blank" rel="noreferrer">Visit GitHub <Github size={15} /></a></div><div className="github-feed" aria-live="polite"><div className="github-feed-heading"><span>Latest commit notes</span><span>{githubStatus === "loading" ? "Refreshing…" : githubStatus === "ready" ? "Live now" : "Temporarily unavailable"}</span></div>{githubStatus === "loading" && <p className="github-feed-empty">Reading the public activity feed…</p>}{githubStatus === "error" && <p className="github-feed-empty">GitHub’s public feed is taking a quiet moment. Adam will still answer from Rebecca’s portfolio profile.</p>}{githubStatus === "ready" && githubActivity.length === 0 && <p className="github-feed-empty">No recent public commits were returned. Visit GitHub for the full repository history.</p>}{githubStatus === "ready" && githubActivity.slice(0, 5).map((activity) => <a className="github-commit" key={activity.id} href={activity.commitUrl} target="_blank" rel="noreferrer"><span className="github-commit-dot" /><div><strong>{activity.message}</strong><small>{activity.repo} · {formatRelativeDate(activity.date)} · {activity.sha}</small></div><ExternalLink size={14} /></a>)}</div><div className="github-meta"><span>{githubProfile?.name ?? "Rebecca Adams"} · @{GITHUB_LOGIN}</span><span>{githubStatus === "ready" ? "Public commits · refreshed on visit" : "Public activity feed"}</span></div></div>
 
-      <section className="contact-section" id="contact" aria-labelledby="contact-title"><div className="contact-left"><div className="section-index contact-index"><span>06</span><i /> Say hello</div><p className="eyebrow">Open to potential employers &amp; recruiters</p><h2 id="contact-title">Let’s make<br />something <em>clearer.</em></h2><p className="contact-note">This inbox is open to hiring managers, recruiters, and collaborators looking for a thoughtful junior web developer. If you see a role where curiosity, reliability, and people-centred problem-solving would add value, I would be glad to connect.</p><div className="social-links"><a href="mailto:camissa.adams17@gmail.com"><Mail size={16} /> Email me</a><a href="https://github.com/rebeccacamissa" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a><a href="https://www.linkedin.com/in/rebecca-adams-tech" target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a></div></div><form className="contact-form" onSubmit={submitForm}><div className="form-heading"><span>New message</span><p>Your message will be securely routed to Rebecca’s inbox.</p></div><label>Your name<input name="name" required value={form.name} onChange={event => setForm({ ...form, name: event.target.value })} placeholder="How should I say hello?" /></label><label>Email address<input name="email" required type="email" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" /></label><label>Message<textarea name="message" required value={form.message} onChange={event => setForm({ ...form, message: event.target.value })} placeholder="What would you like to build?" rows={4} /></label><button className="button-send" type="submit" disabled={formState === "sending"} aria-busy={formState === "sending"}>{formState === "sending" ? <><Loader2 className="submit-spinner" size={16} aria-hidden="true" /> Sending securely…</> : <>Send message <Send size={17} /></>}</button>{formState === "success" && <p className="form-success" role="status" aria-live="polite">Thank you — your message has been sent directly to Rebecca. She’ll be in touch as soon as possible.</p>}{formState === "error" && <p className="form-error" role="alert">Your message could not be sent. Please try again or email Rebecca directly.</p>}{formState === "unconfigured" && <p className="form-error" role="alert">The secure form endpoint still needs to be connected. Please email Rebecca directly for now.</p>}</form></section>
+      <section className="contact-section" id="contact" aria-labelledby="contact-title"><div className="contact-ambient" aria-hidden="true"><span className="ambient-glyph contact-code" style={{ transform: `translate3d(${parallax.x * 0.24}px, ${parallax.y * 0.24}px, 0)` }}>&lt;/&gt;</span><span className="ambient-glyph contact-spark" style={{ transform: `translate3d(${parallax.x * -0.18}px, ${parallax.y * -0.18}px, 0)` }}>✦</span><span className="ambient-ring contact-ring" style={{ transform: `translate3d(${parallax.x * 0.13}px, ${parallax.y * 0.13}px, 0)` }} /></div><div className="contact-left"><div className="section-index contact-index"><span>06</span><i /> Say hello</div><p className="eyebrow">Open to potential employers &amp; recruiters</p><h2 id="contact-title">Let’s make<br />something <em>clearer.</em></h2><p className="contact-note">This inbox is open to hiring managers, recruiters, and collaborators looking for a thoughtful junior web developer. If you see a role where curiosity, reliability, and people-centred problem-solving would add value, I would be glad to connect.</p><div className="social-links"><a href="mailto:camissa.adams17@gmail.com"><Mail size={16} /> Email me</a><a href="https://github.com/rebeccacamissa" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a><a href="https://www.linkedin.com/in/rebecca-adams-tech" target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a></div></div><form className="contact-form" onSubmit={submitForm}><div className="form-heading"><span>New message</span><p>Your message will be securely routed to Rebecca’s inbox.</p></div><label>Your name<input name="name" required value={form.name} onChange={event => setForm({ ...form, name: event.target.value })} placeholder="How should I say hello?" /></label><label>Email address<input name="email" required type="email" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" /></label><label>Message<textarea name="message" required value={form.message} onChange={event => setForm({ ...form, message: event.target.value })} placeholder="What would you like to build?" rows={4} /></label><button className="button-send" type="submit" disabled={formState === "sending"} aria-busy={formState === "sending"}>{formState === "sending" ? <><Loader2 className="submit-spinner" size={16} aria-hidden="true" /> Sending securely…</> : <>Send message <Send size={17} /></>}</button>{formState === "success" && <p className="form-success" role="status" aria-live="polite">Thank you — your message has been sent directly to Rebecca. She’ll be in touch as soon as possible.</p>}{formState === "error" && <p className="form-error" role="alert">Your message could not be sent. Please try again or email Rebecca directly.</p>}{formState === "unconfigured" && <p className="form-error" role="alert">The secure form endpoint still needs to be connected. Please email Rebecca directly for now.</p>}</form></section>
 
       <footer><span>© {new Date().getFullYear()} Rebecca Adams</span><span>Built with care in Cape Town</span><a href="#top">Back to top <ArrowRight size={13} /></a></footer><CatAssistant cvUrl={CV_URL} githubActivity={githubActivity} githubStatus={githubStatus} />
     </main>
