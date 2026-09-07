@@ -170,6 +170,7 @@ export default function CatAssistant({ cvUrl, githubActivity = [], githubStatus 
       )}
       <button className={`cat-mascot cat-mode-${mode}`} onClick={openOrClose} aria-expanded={isOpen} aria-label={isOpen ? "Close Adam's helper" : "Open Adam's helper"}>
         <span className="cat-mascot-art" style={{ backgroundImage: `url(${CAT_ASSETS[mode]})` }} aria-hidden="true" />
+        {mode === "sleeping" && <span className="cat-sleep-zs" aria-hidden="true"><b>Z</b><b>z</b><b>z</b></span>}
         <span className="sr-only">{isOpen ? "Close Adam's helper" : "Open Adam's helper"}</span>
       </button>
     </aside>

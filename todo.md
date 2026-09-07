@@ -128,6 +128,12 @@ The published portfolio is now rendering actual public commit links for rebeccac
 Desktop and mobile full-page previews preserve the editorial hierarchy, responsive timeline, expanded text-led case studies, skill matrix, credentials area, GitHub section, contact form, and small bottom-right Adam trigger. The checklist’s old paw-cursor assertion conflicts with the latest approved pink standard-arrow requirement, so the arrow is retained. The missing SPA `_redirects` rule has been corrected. The credential list currently contains seven entries, but the checklist names eight course titles and the supplied seventh asset visibly reads Business Analysis Fundamentals rather than Introduction into Data Analysis; this must be reported rather than mislabelled. A real Formspree submission still requires confirmation before sending an external test message.
 
 
+## Current enhancement pass
+
+- [x] Add a visible loading spinner and clear success message to the contact form submission flow.
+- [x] Add a subtle floating “Zzz” animation to Adam’s 15-second sleeping state.
+- [x] Run typecheck/build and visually verify the updated states before saving a checkpoint.
+
 ## Confirmed QA closeout
 
 - [x] Confirm the final credential is labelled Business Analysis Fundamentals everywhere it appears.
