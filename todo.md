@@ -153,3 +153,12 @@ Desktop and mobile full-page previews preserve the editorial hierarchy, responsi
 ## Content integrity note
 
 The mentorship carousel must not present invented testimonials, ratings, or endorsements as real user-generated feedback. Until supplied, cards will be labelled as placeholder slots or growth prompts.
+
+
+## Cursor, resume, and contact validation pass
+
+- [x] Reduce the pink cursor asset slightly while preserving its center hotspot and pink paw styling.
+- [x] Add an interactive Hero Download Resume button with a subtle hover animation.
+- [x] Add inline validation messages for the contact form and keep invalid submissions from reaching Formspree.
+- [x] Add a clear animated success state after a valid contact submission succeeds.
+- [x] Run typecheck/build and responsive visual checks before saving a checkpoint.

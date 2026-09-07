@@ -124,3 +124,22 @@ body { overscroll-behavior-y: none; }
 @media (max-width:900px) { .growth-heading, .roadmap-heading { gap:2.5rem; } }
 @media (max-width:680px) { .hero-typewriter { font-size:1.3rem; margin-top:1rem; }.hero-ambient .glyph-code { left:3%; top:18%; }.hero-ambient .glyph-spark { right:3%; top:13%; }.growth-heading, .roadmap-heading { grid-template-columns:1fr; gap:1.4rem; }.growth-carousel { margin-top:2.8rem; }.growth-card { min-height:235px; padding:1.25rem 1.2rem; }.roadmap-track { grid-template-columns:1fr; gap:1rem; }.roadmap-track::before { top:1.4rem; bottom:1.4rem; left:1.4rem; right:auto; width:1px; height:auto; background:linear-gradient(180deg,var(--camel),var(--boho),var(--camel)); }.roadmap-node { flex-direction:row; justify-content:flex-start; gap:.8rem; padding:0; text-align:left; }.roadmap-node > span:last-child { flex:1; }.roadmap-node strong { font-size:1.1rem; }.roadmap-detail { margin-top:2.2rem; padding:1.2rem 1.1rem; }.contact-ambient .contact-ring { right:-4rem; top:9%; width:8rem; height:8rem; } }
 @media (prefers-reduced-motion: reduce) { .ambient-glyph, .ambient-ring, .hero-typewriter i { animation:none; }.hero-ambient > *, .contact-ambient > * { transition:none; } }
+
+
+/* Cursor, resume CTA, and contact feedback refinement: keep the pink paw tactile but quieter, make the download action feel intentional, and surface form states inline. */
+:root { --pink-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cg fill='%23d8899e' stroke='%235d3a35' stroke-width='.7'%3E%3Cellipse cx='11' cy='14.5' rx='4.6' ry='4.2'/%3E%3Cellipse cx='5.5' cy='8' rx='2' ry='2.8' transform='rotate(-28 5.5 8)'/%3E%3Cellipse cx='9' cy='5.5' rx='2' ry='2.8' transform='rotate(-10 9 5.5)'/%3E%3Cellipse cx='13.5' cy='5.5' rx='2' ry='2.8' transform='rotate(10 13.5 5.5)'/%3E%3Cellipse cx='17' cy='8' rx='2' ry='2.8' transform='rotate(28 17 8)'/%3E%3C/g%3E%3C/svg%3E") 10 10, auto; }
+body, body button, body a, body input, body textarea { cursor:var(--pink-cursor); }
+.hero-resume { margin-top:0; border-color:var(--boho); background:color-mix(in srgb,var(--background) 72%,transparent); color:var(--foreground); box-shadow:4px 4px 0 color-mix(in srgb,var(--camel) 78%,transparent); }
+.hero-resume:hover { background:var(--camel); color:var(--roast); transform:translateY(-3px) rotate(-1deg); box-shadow:6px 7px 0 color-mix(in srgb,var(--boho) 30%,transparent); }
+.hero-resume svg { transition:transform .2s ease; }
+.hero-resume:hover svg { transform:translateY(2px); }
+.contact-form label.has-error { color:#ffb9b1; }
+.contact-form label.has-error input, .contact-form label.has-error textarea { border-bottom-color:#ff8c83; }
+.contact-form input[aria-invalid="true"], .contact-form textarea[aria-invalid="true"] { box-shadow:0 1px 0 #ff8c83; }
+.field-error { display:block; margin-top:.18rem; color:#ffb9b1; font-size:.6rem; line-height:1.45; letter-spacing:.02em; text-transform:none; font-weight:600; }
+.form-success { display:flex; align-items:flex-start; gap:.42rem; animation:contact-success-in .55s cubic-bezier(.23,1,.32,1) both; }
+.form-success::before { content:"✓"; flex:none; display:grid; place-items:center; width:1.1rem; height:1.1rem; border:1px solid var(--camel); border-radius:50%; font-size:.65rem; line-height:1; animation:contact-success-mark .7s .15s cubic-bezier(.23,1,.32,1) both; }
+@keyframes contact-success-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes contact-success-mark { from { opacity:0; transform:scale(.6) rotate(-18deg); } to { opacity:1; transform:scale(1) rotate(0); } }
+@media (max-width:680px) { .hero-actions { align-items:stretch; }.hero-resume { order:3; }.field-error { font-size:.58rem; } }
+@media (prefers-reduced-motion:reduce) { .hero-resume, .hero-resume svg, .form-success, .form-success::before { animation:none; transition:none; } }
