@@ -101,3 +101,16 @@ The refreshed desktop and mobile previews show Adam as a small, fixed bottom-rig
 - [x] Expand Adam’s response guidance, content, and generation parameters.
 - [x] Run type, production-build, and interaction checks, then save a checkpoint.
 
+
+## Live GitHub Activity troubleshooting
+
+- [x] Reproduce the GitHub fallback and inspect request URLs, response status, CORS behavior, and rate-limit headers.
+- [x] Verify every endpoint targets `rebeccacamissa` and handle GitHub API failures safely.
+- [x] Make the smallest reliable fix, then verify real commits render in the dashboard and Adam responses.
+- [ ] Save the repaired checkpoint.
+
+
+## GitHub repair verification notes
+
+The published portfolio is now rendering actual public commit links for rebeccacamissa, including repository names, messages, dates, and commit URLs. Direct GitHub API checks returned 200 responses with `access-control-allow-origin: *` and remaining rate-limit capacity, so the earlier fallback was not caused by an invalid username, endpoint, CORS policy, or exhausted quota. The helper click verification was interrupted because the browser navigated to the Manus homepage; the portfolio itself remains healthy.
+
